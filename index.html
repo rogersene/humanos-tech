@@ -32,17 +32,23 @@
                 <a href="#contacto" class="nav-link" data-lang="nav-contacto">Contacto</a>
             </div>
             <div class="nav-actions">
-                <div class="language-selector">
-                    <button class="lang-btn active" data-lang="es">ES</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="fr">FR</button>
-                    <button class="lang-btn" data-lang="pt">PT</button>
-                    <button class="lang-btn" data-lang="it">IT</button>
-                    <button class="lang-btn" data-lang="de">DE</button>
-                    <button class="lang-btn" data-lang="et">ET</button>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="es">ES</button>
+                <div class="lang-dropdown">
+                <button class="lang-btn" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="fr">FR</button>
+                <button class="lang-btn" data-lang="pt">PT</button>
+                <button class="lang-btn" data-lang="it">IT</button>
+                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="et">ET</button>
                 </div>
-                <button class="cta-btn" data-lang="cta-demo" onclick="location.href=\'#contacto\'">Agenda una Demo</button>
             </div>
+            <button class="cta-btn" data-lang="cta-demo" onclick="location.href='#contacto'">
+                Agenda una Demo
+            </button>
+            </div>
+
             <div class="nav-toggle" id="nav-toggle">
                 <span></span>
                 <span></span>
@@ -254,6 +260,7 @@
             </div>
         </div>
     </section>
+    
 
     <!-- Process Section -->
     <section class="process">
@@ -296,60 +303,39 @@
             </div>
         </div>
     </section>
+
+
     <!-- Founders Section -->
-    <section id="fundadores" class="founders">
-        <div class="container">
-            <div class="founders-content">
-                <div class="founders-text">
-                    <h2 class="section-title" data-lang="founders-title">Únete a nuestro equipo global</h2>
-                    <p class="section-subtitle" data-lang="founders-subtitle">
-                        Forma parte de una red de profesionales especializados que trabajan con empresas líderes en todo el mundo. 
-                        Desarrolla tu carrera sin límites geográficos.
-                    </p>
-                    <div class="founders-benefits">
-                        <div class="benefit-item">
-                            <div class="benefit-icon">💼</div>
-                            <span data-lang="founders-benefit-1">Proyectos internacionales</span>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">⏰</div>
-                            <span data-lang="founders-benefit-2">Flexibilidad horaria</span>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">📈</div>
-                            <span data-lang="founders-benefit-3">Crecimiento profesional</span>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">🌍</div>
-                            <span data-lang="founders-benefit-4">Trabajo remoto</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" data-lang="btn-join-talent" onclick="location.href='#contacto'">Únete como talento</button>
+        <section class="section team-section process">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" data-lang="about-us-team-title">Nuestro Equipo</h2>
+                    <p class="section-subtitle" data-lang="about-us-team-subtitle">Forma parte de una red de profesionales especializados que trabajan con empresas líderes en todo el mundo. Desarrolla tu carrera sin límites geográficos.</p>
                 </div>
-                <div class="founders-cards">
-                    <div class="founder-card">
-                        <div class="founder-avatar"></div>
-                        <h3 class="founder-name">Mariela Yuri</h3>
-                        <p class="founder-title">CEO</p>
-                        <p class="founder-location">Italia</p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 data-lang="about-us-member-1-name">Maríela Yuri</h3>
+                        <p data-lang="about-us-member-1-role">CEO</p>
+                        <p data-lang="about-us-member-1-desc">Experta en estrategia empresarial con más de 20 años conectando empresas con talento global.</p>
                     </div>
-                    <div class="founder-card">
-                        <div class="founder-avatar"></div>
-                        <h3 class="founder-name">Carlos Lohen</h3>
-                        <p class="founder-title">CTO</p>
-                        <p class="founder-location">Francia</p>
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 data-lang="about-us-member-2-name">Carlos Lohen</h3>
+                        <p data-lang="about-us-member-2-role">CTO</p>
+                        <p data-lang="about-us-member-2-desc">Analistas de sistemas especializado en plataformas escalables y soluciones tecnológicas innovadoras.</p>
                     </div>
-                    <div class="founder-card">
-                        <div class="founder-avatar"></div>
-                        <h3 class="founder-name">Carlos Velázquez</h3>
-                        <p class="founder-title">COO</p>
-                        <p class="founder-location">Venezuela</p>
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 data-lang="about-us-member-3-name">Carlos Velázquez</h3>
+                        <p data-lang="about-us-member-3-role">COO</p>
+                        <p data-lang="about-us-member-3-desc">Especialista en optimización de procesos y gestión de equipos distribuidos globalmente.</p>
                     </div>
                 </div>
             </div>
+        </section>
         </div>
-    </section>    </div>
-            </div>
+        </div>
         </div>
     </section>
 
@@ -379,7 +365,7 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="demo-form">
+                    <form action="https://formsubmit.co/rogersenefaria@gmail.com" method="POST" id="demo-form">
                         <div class="form-group">
                             <input type="text" id="name" name="name" required>
                             <label for="name" data-lang="form-name">Nombre completo</label>
@@ -450,12 +436,30 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 HumanosTech. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
+                <p>&copy; 2025 HumanosTech. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const selector = document.querySelector(".language-selector");
+        let hideTimeout;
+
+        selector.addEventListener("mouseenter", () => {
+            clearTimeout(hideTimeout);
+            selector.classList.add("show");
+        });
+
+        selector.addEventListener("mouseleave", () => {
+            hideTimeout = setTimeout(() => {
+            selector.classList.remove("show");
+            }, 200); // atraso de 200ms antes de esconder
+        });
+        });
+    </script>
 </body>
 </html>
 

@@ -243,37 +243,108 @@ p {
     width: 100%;
 }
 
+
+
 .nav-actions {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
 }
 
-.language-selector {
+
+
+
+.nav-actions {
     display: flex;
-    gap: var(--spacing-xs);
+    align-items: center;
+    gap: var(--spacing-md);
+    position: relative;
 }
 
-.lang-btn {
-    background: none;
-    border: 1px solid var(--gray-300);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-    transition: all var(--transition-fast);
+
+.language-selector {
+  position: relative;
+  display: inline-block;
 }
 
+/* idioma ativo (botão principal) */
 .lang-btn.active {
-    background: var(--primary-blue);
-    color: var(--white);
-    border-color: var(--primary-blue);
+  background: linear-gradient(90deg, var(--primary-blue), #ff6b4a);
+  color: var(--white);
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
-.lang-btn:hover:not(.active) {
-    background: var(--gray-100);
+/* leve efeito de brilho ao passar o mouse */
+.lang-btn.active:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+  cursor: pointer;
 }
+
+/* container do dropdown */
+.lang-dropdown {
+  position: absolute;
+  top: 115%;
+  left: 0;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  padding: 0.4rem;
+  display: flex;
+  gap: 0.35rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+  transform: translateY(-5px);
+  z-index: 20;
+}
+
+/* mostra o dropdown */
+.language-selector.show .lang-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* botões do dropdown */
+.lang-dropdown .lang-btn {
+  border-radius: 6px;
+  border: 1px solid var(--gray-400);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* hover suave */
+.lang-dropdown .lang-btn:hover {
+  background: linear-gradient(90deg, var(--primary-blue), #ff6b4a);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-1px);
+  cursor: pointer;
+}
+
+/* esconde o idioma ativo */
+.lang-dropdown .lang-btn.active {
+  display: none;
+}
+
+
+
+
+
+
 
 .nav-toggle {
     display: none;
@@ -1789,61 +1860,104 @@ p {
 }
 
 
+/* =============================
+   Founders Section (fundo claro)
+============================= */
 
-/* Founders Section */
 .founders {
     padding: var(--spacing-3xl) 0;
-    background: var(--gray-900);
-    color: var(--white);
+    background: var(--gray-50);
+    color: var(--gray-900);
+}
+
+.founders-content {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    align-items: center;
+    gap: var(--spacing-2xl);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+/* ---------- Texto Lateral ---------- */
+.founders-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
 }
 
 .founders .section-title {
-    color: var(--white);
-    text-align: center;
-    margin-bottom: var(--spacing-sm);
+    color: var(--gray-900);
+    font-weight: var(--font-weight-bold);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xs);
+    text-align: left;
 }
 
 .founders .section-subtitle {
-    color: var(--gray-300);
-    text-align: center;
-    margin-bottom: var(--spacing-3xl);
+    color: var(--gray-700);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+    text-align: left;
 }
 
-.founders-grid {
+/* ---------- Benefícios ---------- */
+.founders-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--gray-700);
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.benefit-item:hover {
+    color: var(--primary-blue);
+}
+
+/* ---------- Cards dos Fundadores ---------- */
+.founders-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-xl);
-    max-width: 1000px;
-    margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-lg);
 }
 
 .founder-card {
-    background: var(--gray-800);
+    background: var(--white);
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     text-align: center;
+    border: 1px solid var(--gray-200);
     transition: all var(--transition-normal);
-    border: 1px solid var(--gray-700);
+    box-shadow: var(--shadow-sm);
 }
 
 .founder-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
     border-color: var(--primary-blue);
 }
 
-.founder-photo {
-    width: 120px;
-    height: 120px;
+.founder-avatar {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    object-fit: cover;
+    background: var(--gray-100);
     margin: 0 auto var(--spacing-md);
-    border: 3px solid var(--primary-blue);
+    border: 2px solid var(--primary-blue);
 }
 
 .founder-name {
-    color: var(--white);
-    font-size: 1.5rem;
+    color: var(--gray-900);
+    font-size: 1.25rem;
     font-weight: var(--font-weight-bold);
     margin-bottom: var(--spacing-xs);
 }
@@ -1851,31 +1965,33 @@ p {
 .founder-title {
     color: var(--primary-blue);
     font-weight: var(--font-weight-medium);
-    margin-bottom: var(--spacing-md);
-    font-size: 1.1rem;
-}
-
-.founder-description {
-    color: var(--gray-300);
-    line-height: 1.6;
+    margin-bottom: var(--spacing-xs);
     font-size: 1rem;
 }
 
-@media (max-width: 768px) {
-    .founders-grid {
+.founder-location {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 900px) {
+    .founders-content {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        text-align: center;
     }
-    
-    .founder-card {
-        padding: var(--spacing-lg);
+
+    .founders .section-title,
+    .founders .section-subtitle {
+        text-align: center;
     }
-    
-    .founder-photo {
-        width: 100px;
-        height: 100px;
+
+    .founders-benefits {
+        align-items: center;
     }
 }
+
+
 
 
 /* Logo Image Styles */

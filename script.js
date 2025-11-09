@@ -904,7 +904,7 @@ let currentLanguage = 'es';
 const navbar = document.getElementById('navbar');
 const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('nav-menu');
-const langButtons = document.querySelectorAll('.lang-btn');
+const langButtons = document.querySelectorAll('.language-selector .lang-btn');
 const demoForm = document.getElementById('demo-form');
 
 // Initialize the application
@@ -919,31 +919,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Language Management
 function initializeLanguage() {
-    // Set default language from localStorage or browser language
     const savedLanguage = localStorage.getItem('preferred-language');
     const browserLanguage = navigator.language.split('-')[0];
-    
+
     if (savedLanguage && translations[savedLanguage]) {
         currentLanguage = savedLanguage;
     } else if (translations[browserLanguage]) {
         currentLanguage = browserLanguage;
+    } else {
+        currentLanguage = 'es';
     }
-    
+
     updateLanguage(currentLanguage);
     updateLanguageButtons();
-    
-    // Add event listeners to language buttons
+    updateActiveLanguageButton(currentLanguage); 
+
+    // Adiciona eventos aos botões
     langButtons.forEach(button => {
         button.addEventListener('click', () => {
             const lang = button.getAttribute('data-lang');
             if (lang && translations[lang]) {
                 updateLanguage(lang);
                 updateLanguageButtons();
+                updateActiveLanguageButton(lang);
                 localStorage.setItem('preferred-language', lang);
             }
         });
     });
 }
+
+function updateActiveLanguageButton(selectedLang) {
+    const mainButton = document.querySelector('.language-selector > .lang-btn.active');
+    const dropdownButtons = document.querySelectorAll('.lang-dropdown .lang-btn');
+
+    if (mainButton) {
+        mainButton.textContent = selectedLang.toUpperCase();
+        mainButton.setAttribute('data-lang', selectedLang);
+    }
+
+    dropdownButtons.forEach(btn => {
+        const lang = btn.getAttribute('data-lang');
+        btn.style.display = (lang === selectedLang) ? 'none' : 'inline-block';
+    });
+}
+
+
 
 function updateLanguage(language) {
     currentLanguage = language;
@@ -962,16 +982,24 @@ function updateLanguage(language) {
         }
     });
     
-    // Update HTML lang attribute
     document.documentElement.lang = language;
 }
 
 function updateLanguageButtons() {
-    langButtons.forEach(button => {
+    const dropdownButtons = document.querySelectorAll('.lang-dropdown .lang-btn');
+    const mainButton = document.querySelector('.language-selector > .lang-btn');
+
+    dropdownButtons.forEach(button => {
         const lang = button.getAttribute('data-lang');
         button.classList.toggle('active', lang === currentLanguage);
     });
+
+    if (mainButton) {
+        mainButton.textContent = currentLanguage.toUpperCase();
+        mainButton.setAttribute('data-lang', currentLanguage);
+    }
 }
+
 
 // Navigation Management
 function initializeNavigation() {
@@ -979,20 +1007,19 @@ function initializeNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
             const targetId = link.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
+            if (targetId.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                }
             }
         });
     });
@@ -1098,38 +1125,37 @@ function initializeForm() {
     // Form validation and submission
     demoForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const formData = new FormData(demoForm);
-        const data = Object.fromEntries(formData.entries());
-        
-        // Basic validation
-        if (!validateForm(data)) {
-            return;
-        }
-        
-        // Show loading state
         const submitButton = demoForm.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
-        submitButton.textContent = getTranslation('form-loading') || 'Enviando...';
+
+        submitButton.textContent = 'Enviando...';
         submitButton.disabled = true;
-        
+
         try {
-            // Simulate form submission (replace with actual API call)
-            await simulateFormSubmission(data);
-            
-            // Show success message
-            showNotification(getTranslation('form-success') || 'Demo agendada con éxito. Te contactaremos pronto.', 'success');
-            demoForm.reset();
-            
+            const response = await fetch('sendmail.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showNotification('✅ Demo agendada com sucesso! Entraremos em contato em breve.', 'success');
+                demoForm.reset();
+            } else {
+                showNotification('❌ Ocorreu um erro: ' + (result.message || 'Tente novamente mais tarde.'), 'error');
+            }
+
         } catch (error) {
-            // Show error message
-            showNotification(getTranslation('form-error') || 'Error al enviar el formulario. Inténtalo de nuevo.', 'error');
+            showNotification('❌ Erro inesperado. Verifique sua conexão e tente novamente.', 'error');
         } finally {
-            // Reset button state
             submitButton.textContent = originalText;
             submitButton.disabled = false;
         }
     });
+
     
     // Enhanced form interactions
     const formInputs = demoForm.querySelectorAll('input, select, textarea');
@@ -1729,464 +1755,463 @@ Object.assign(translations.de, {
 
 
 // Sales Boost Page Translations
-Object.assign(translations.es, {
-    'sales-boost-title': 'Impulso de Ventas - HumanosTech',
-    'sales-boost-meta-desc': 'Servicios especializados para impulsar tus ventas con estrategias personalizadas y atención excepcional.',
-    'sales-boost-hero-title': 'Impulso de Ventas',
-    'sales-boost-hero-subtitle': 'Potencia tus resultados con estrategias de ventas innovadoras y un equipo dedicado a tu éxito.',
-    'sales-boost-section-title': 'Nuestros Servicios de Impulso de Ventas',
-    'sales-boost-section-subtitle': 'Diseñamos e implementamos estrategias que maximizan tus oportunidades de venta y fidelizan a tus clientes.',
-    'sales-boost-service-1-title': 'Generación de Leads Calificados',
-    'sales-boost-service-1-desc': 'Identificamos y atraemos prospectos con alto potencial de conversión para tu negocio.',
-    'feature-leads': 'Leads',
-    'feature-conversion': 'Conversión',
-    'sales-boost-service-2-title': 'Calificación y Nutrición de Leads',
-    'sales-boost-service-2-desc': 'Clasificamos y cultivamos tus leads, preparándolos para el cierre de ventas con información relevante.',
-    'feature-nurturing': 'Nutrición',
-    'feature-qualification': 'Calificación',
-    'sales-boost-service-3-title': 'Cierre de Ventas y Post-Venta',
-    'sales-boost-service-3-desc': 'Asesoramiento experto en el proceso de cierre y seguimiento post-venta para asegurar la satisfacción del cliente.',
-    'feature-closing': 'Cierre',
-    'feature-post-sales': 'Post-Venta',
-    'sales-boost-service-4-title': 'Optimización de Procesos de Ventas',
-    'sales-boost-service-4-desc': 'Analizamos y mejoramos tus embudos de venta para identificar oportunidades y aumentar la eficiencia.',
-    'contact-cta-title': '¿Listo para disparar tus ventas?',
-    'contact-cta-subtitle': 'Agenda una demo gratuita y descubre cómo podemos transformar tus resultados comerciales.'
-});
+    Object.assign(translations.es, {
+        'sales-boost-title': 'Impulso de Ventas - HumanosTech',
+        'sales-boost-meta-desc': 'Servicios especializados para impulsar tus ventas con estrategias personalizadas y atención excepcional.',
+        'sales-boost-hero-title': 'Impulso de Ventas',
+        'sales-boost-hero-subtitle': 'Potencia tus resultados con estrategias de ventas innovadoras y un equipo dedicado a tu éxito.',
+        'sales-boost-section-title': 'Nuestros Servicios de Impulso de Ventas',
+        'sales-boost-section-subtitle': 'Diseñamos e implementamos estrategias que maximizan tus oportunidades de venta y fidelizan a tus clientes.',
+        'sales-boost-service-1-title': 'Generación de Leads Calificados',
+        'sales-boost-service-1-desc': 'Identificamos y atraemos prospectos con alto potencial de conversión para tu negocio.',
+        'feature-leads': 'Leads',
+        'feature-conversion': 'Conversión',
+        'sales-boost-service-2-title': 'Calificación y Nutrición de Leads',
+        'sales-boost-service-2-desc': 'Clasificamos y cultivamos tus leads, preparándolos para el cierre de ventas con información relevante.',
+        'feature-nurturing': 'Nutrición',
+        'feature-qualification': 'Calificación',
+        'sales-boost-service-3-title': 'Cierre de Ventas y Post-Venta',
+        'sales-boost-service-3-desc': 'Asesoramiento experto en el proceso de cierre y seguimiento post-venta para asegurar la satisfacción del cliente.',
+        'feature-closing': 'Cierre',
+        'feature-post-sales': 'Post-Venta',
+        'sales-boost-service-4-title': 'Optimización de Procesos de Ventas',
+        'sales-boost-service-4-desc': 'Analizamos y mejoramos tus embudos de venta para identificar oportunidades y aumentar la eficiencia.',
+        'contact-cta-title': '¿Listo para disparar tus ventas?',
+        'contact-cta-subtitle': 'Agenda una demo gratuita y descubre cómo podemos transformar tus resultados comerciales.'
+    });
 
-Object.assign(translations.en, {
-    'sales-boost-title': 'Sales Boost - HumanosTech',
-    'sales-boost-meta-desc': 'Specialized services to boost your sales with personalized strategies and exceptional attention.',
-    'sales-boost-hero-title': 'Sales Boost',
-    'sales-boost-hero-subtitle': 'Boost your results with innovative sales strategies and a team dedicated to your success.',
-    'sales-boost-section-title': 'Our Sales Boost Services',
-    'sales-boost-section-subtitle': 'We design and implement strategies that maximize your sales opportunities and retain your customers.',
-    'sales-boost-service-1-title': 'Qualified Lead Generation',
-    'sales-boost-service-1-desc': 'We identify and attract prospects with high conversion potential for your business.',
-    'feature-leads': 'Leads',
-    'feature-conversion': 'Conversion',
-    'sales-boost-service-2-title': 'Lead Qualification and Nurturing',
-    'sales-boost-service-2-desc': 'We classify and nurture your leads, preparing them for sales closure with relevant information.',
-    'feature-nurturing': 'Nurturing',
-    'feature-qualification': 'Qualification',
-    'sales-boost-service-3-title': 'Sales Closing and After-Sales',
-    'sales-boost-service-3-desc': 'Expert advice on the closing process and after-sales follow-up to ensure customer satisfaction.',
-    'feature-closing': 'Closing',
-    'feature-post-sales': 'After-Sales',
-    'sales-boost-service-4-title': 'Sales Process Optimization',
-    'sales-boost-service-4-desc': 'We analyze and improve your sales funnels to identify opportunities and increase efficiency.',
-    'contact-cta-title': 'Ready to skyrocket your sales?',
-    'contact-cta-subtitle': 'Schedule a free demo and discover how we can transform your business results.'
-});
+    Object.assign(translations.en, {
+        'sales-boost-title': 'Sales Boost - HumanosTech',
+        'sales-boost-meta-desc': 'Specialized services to boost your sales with personalized strategies and exceptional attention.',
+        'sales-boost-hero-title': 'Sales Boost',
+        'sales-boost-hero-subtitle': 'Boost your results with innovative sales strategies and a team dedicated to your success.',
+        'sales-boost-section-title': 'Our Sales Boost Services',
+        'sales-boost-section-subtitle': 'We design and implement strategies that maximize your sales opportunities and retain your customers.',
+        'sales-boost-service-1-title': 'Qualified Lead Generation',
+        'sales-boost-service-1-desc': 'We identify and attract prospects with high conversion potential for your business.',
+        'feature-leads': 'Leads',
+        'feature-conversion': 'Conversion',
+        'sales-boost-service-2-title': 'Lead Qualification and Nurturing',
+        'sales-boost-service-2-desc': 'We classify and nurture your leads, preparing them for sales closure with relevant information.',
+        'feature-nurturing': 'Nurturing',
+        'feature-qualification': 'Qualification',
+        'sales-boost-service-3-title': 'Sales Closing and After-Sales',
+        'sales-boost-service-3-desc': 'Expert advice on the closing process and after-sales follow-up to ensure customer satisfaction.',
+        'feature-closing': 'Closing',
+        'feature-post-sales': 'After-Sales',
+        'sales-boost-service-4-title': 'Sales Process Optimization',
+        'sales-boost-service-4-desc': 'We analyze and improve your sales funnels to identify opportunities and increase efficiency.',
+        'contact-cta-title': 'Ready to skyrocket your sales?',
+        'contact-cta-subtitle': 'Schedule a free demo and discover how we can transform your business results.'
+    });
 
-Object.assign(translations.fr, {
-    'sales-boost-title': 'Boost des Ventes - HumanosTech',
-    'sales-boost-meta-desc': 'Services spécialisés pour stimuler vos ventes avec des stratégies personnalisées et une attention exceptionnelle.',
-    'sales-boost-hero-title': 'Boost des Ventes',
-    'sales-boost-hero-subtitle': 'Boostez vos résultats avec des stratégies de vente innovantes et une équipe dédiée à votre succès.',
-    'sales-boost-section-title': 'Nos Services de Boost des Ventes',
-    'sales-boost-section-subtitle': 'Nous concevons et mettons en œuvre des stratégies qui maximisent vos opportunités de vente et fidélisent vos clients.',
-    'sales-boost-service-1-title': 'Génération de Leads Qualifiés',
-    'sales-boost-service-1-desc': 'Nous identifions et attirons des prospects à fort potentiel de conversion pour votre entreprise.',
-    'feature-leads': 'Leads',
-    'feature-conversion': 'Conversion',
-    'sales-boost-service-2-title': 'Qualification et Nutrition des Leads',
-    'sales-boost-service-2-desc': 'Nous classons et cultivons vos leads, les préparant à la clôture des ventes avec des informations pertinentes.',
-    'feature-nurturing': 'Nutrition',
-    'feature-qualification': 'Qualification',
-    'sales-boost-service-3-title': 'Clôture des Ventes et Post-Vente',
-    'sales-boost-service-3-desc': 'Conseils d\'experts sur le processus de clôture et le suivi post-vente pour assurer la satisfaction du client.',
-    'feature-closing': 'Clôture',
-    'feature-post-sales': 'Post-Vente',
-    'sales-boost-service-4-title': 'Optimisation des Processus de Vente',
-    'sales-boost-service-4-desc': 'Nous analysons et améliorons vos entonnoirs de vente pour identifier les opportunités et augmenter l\'efficacité.',
-    'contact-cta-title': 'Prêt à faire décoller vos ventes?',
-    'contact-cta-subtitle': 'Planifiez une démo gratuite et découvrez comment nous pouvons transformer vos résultats commerciaux.'
-});
+    Object.assign(translations.fr, {
+        'sales-boost-title': 'Boost des Ventes - HumanosTech',
+        'sales-boost-meta-desc': 'Services spécialisés pour stimuler vos ventes avec des stratégies personnalisées et une attention exceptionnelle.',
+        'sales-boost-hero-title': 'Boost des Ventes',
+        'sales-boost-hero-subtitle': 'Boostez vos résultats avec des stratégies de vente innovantes et une équipe dédiée à votre succès.',
+        'sales-boost-section-title': 'Nos Services de Boost des Ventes',
+        'sales-boost-section-subtitle': 'Nous concevons et mettons en œuvre des stratégies qui maximisent vos opportunités de vente et fidélisent vos clients.',
+        'sales-boost-service-1-title': 'Génération de Leads Qualifiés',
+        'sales-boost-service-1-desc': 'Nous identifions et attirons des prospects à fort potentiel de conversion pour votre entreprise.',
+        'feature-leads': 'Leads',
+        'feature-conversion': 'Conversion',
+        'sales-boost-service-2-title': 'Qualification et Nutrition des Leads',
+        'sales-boost-service-2-desc': 'Nous classons et cultivons vos leads, les préparant à la clôture des ventes avec des informations pertinentes.',
+        'feature-nurturing': 'Nutrition',
+        'feature-qualification': 'Qualification',
+        'sales-boost-service-3-title': 'Clôture des Ventes et Post-Vente',
+        'sales-boost-service-3-desc': 'Conseils d\'experts sur le processus de clôture et le suivi post-vente pour assurer la satisfaction du client.',
+        'feature-closing': 'Clôture',
+        'feature-post-sales': 'Post-Vente',
+        'sales-boost-service-4-title': 'Optimisation des Processus de Vente',
+        'sales-boost-service-4-desc': 'Nous analysons et améliorons vos entonnoirs de vente pour identifier les opportunités et augmenter l\'efficacité.',
+        'contact-cta-title': 'Prêt à faire décoller vos ventes?',
+        'contact-cta-subtitle': 'Planifiez une démo gratuite et découvrez comment nous pouvons transformer vos résultats commerciaux.'
+    });
 
-Object.assign(translations.pt, {
-    'sales-boost-title': 'Impulso de Vendas - HumanosTech',
-    'sales-boost-meta-desc': 'Serviços especializados para impulsionar suas vendas com estratégias personalizadas e atendimento excepcional.',
-    'sales-boost-hero-title': 'Impulso de Vendas',
-    'sales-boost-hero-subtitle': 'Potencialize seus resultados com estratégias de vendas inovadoras e uma equipe dedicada ao seu sucesso.',
-    'sales-boost-section-title': 'Nossos Serviços de Impulso de Vendas',
-    'sales-boost-section-subtitle': 'Projetamos e implementamos estratégias que maximizam suas oportunidades de venda e fidelizam seus clientes.',
-    'sales-boost-service-1-title': 'Geração de Leads Qualificados',
-    'sales-boost-service-1-desc': 'Identificamos e atraímos prospects com alto potencial de conversão para o seu negócio.',
-    'feature-leads': 'Leads',
-    'feature-conversion': 'Conversão',
-    'sales-boost-service-2-title': 'Qualificação e Nutrição de Leads',
-    'sales-boost-service-2-desc': 'Classificamos e cultivamos seus leads, preparando-os para o fechamento de vendas com informações relevantes.',
-    'feature-nurturing': 'Nutrição',
-    'feature-qualification': 'Qualificação',
-    'sales-boost-service-3-title': 'Fechamento de Vendas e Pós-Venda',
-    'sales-boost-service-3-desc': 'Assessoria especializada no processo de fechamento e acompanhamento pós-venda para garantir a satisfação do cliente.',
-    'feature-closing': 'Fechamento',
-    'feature-post-sales': 'Pós-Venda',
-    'sales-boost-service-4-title': 'Otimização de Processos de Vendas',
-    'sales-boost-service-4-desc': 'Analisamos e melhoramos seus funis de venda para identificar oportunidades e aumentar a eficiência.',
-    'contact-cta-title': 'Pronto para disparar suas vendas?',
-    'contact-cta-subtitle': 'Agende uma demo gratuita e descubra como podemos transformar seus resultados comerciais.'
-});
+    Object.assign(translations.pt, {
+        'sales-boost-title': 'Impulso de Vendas - HumanosTech',
+        'sales-boost-meta-desc': 'Serviços especializados para impulsionar suas vendas com estratégias personalizadas e atendimento excepcional.',
+        'sales-boost-hero-title': 'Impulso de Vendas',
+        'sales-boost-hero-subtitle': 'Potencialize seus resultados com estratégias de vendas inovadoras e uma equipe dedicada ao seu sucesso.',
+        'sales-boost-section-title': 'Nossos Serviços de Impulso de Vendas',
+        'sales-boost-section-subtitle': 'Projetamos e implementamos estratégias que maximizam suas oportunidades de venda e fidelizam seus clientes.',
+        'sales-boost-service-1-title': 'Geração de Leads Qualificados',
+        'sales-boost-service-1-desc': 'Identificamos e atraímos prospects com alto potencial de conversão para o seu negócio.',
+        'feature-leads': 'Leads',
+        'feature-conversion': 'Conversão',
+        'sales-boost-service-2-title': 'Qualificação e Nutrição de Leads',
+        'sales-boost-service-2-desc': 'Classificamos e cultivamos seus leads, preparando-os para o fechamento de vendas com informações relevantes.',
+        'feature-nurturing': 'Nutrição',
+        'feature-qualification': 'Qualificação',
+        'sales-boost-service-3-title': 'Fechamento de Vendas e Pós-Venda',
+        'sales-boost-service-3-desc': 'Assessoria especializada no processo de fechamento e acompanhamento pós-venda para garantir a satisfação do cliente.',
+        'feature-closing': 'Fechamento',
+        'feature-post-sales': 'Pós-Venda',
+        'sales-boost-service-4-title': 'Otimização de Processos de Vendas',
+        'sales-boost-service-4-desc': 'Analisamos e melhoramos seus funis de venda para identificar oportunidades e aumentar a eficiência.',
+        'contact-cta-title': 'Pronto para disparar suas vendas?',
+        'contact-cta-subtitle': 'Agende uma demo gratuita e descubra como podemos transformar seus resultados comerciais.'
+    });
 
-Object.assign(translations.it, {
-    'sales-boost-title': 'Spinta alle Vendite - HumanosTech',
-    'sales-boost-meta-desc': 'Servizi specializzati per aumentare le tue vendite con strategie personalizzate e un\'attenzione eccezionale.',
-    'sales-boost-hero-title': 'Spinta alle Vendite',
-    'sales-boost-hero-subtitle': 'Potenzia i tuoi risultati con strategie di vendita innovative e un team dedicato al tuo successo.',
-    'sales-boost-section-title': 'I Nostri Servizi di Spinta alle Vendite',
-    'sales-boost-section-subtitle': 'Progettiamo e implementiamo strategie che massimizzano le tue opportunità di vendita e fidelizzano i tuoi clienti.',
-    'sales-boost-service-1-title': 'Generazione di Lead Qualificati',
-    'sales-boost-service-1-desc': 'Identifichiamo e attiriamo prospect con alto potenziale di conversione per la tua attività.',
-    'feature-leads': 'Lead',
-    'feature-conversion': 'Conversione',
-    'sales-boost-service-2-title': 'Qualificazione e Nutrizione dei Lead',
-    'sales-boost-service-2-desc': 'Classifichiamo e coltiviamo i tuoi lead, preparandoli per la chiusura delle vendite con informazioni pertinenti.',
-    'feature-nurturing': 'Nutrizione',
-    'feature-qualification': 'Qualificazione',
-    'sales-boost-service-3-title': 'Chiusura delle Vendite e Post-Vendita',
-    'sales-boost-service-3-desc': 'Consulenza esperta nel processo di chiusura e follow-up post-vendita per garantire la soddisfazione del cliente.',
-    'feature-closing': 'Chiusura',
-    'feature-post-sales': 'Post-Vendita',
-    'sales-boost-service-4-title': 'Ottimizzazione dei Processi di Vendita',
-    'sales-boost-service-4-desc': 'Analizziamo e miglioriamo i tuoi funnel di vendita per identificare opportunità e aumentare l\'efficienza.',
-    'contact-cta-title': 'Pronto a far decollare le tue vendite?',
-    'contact-cta-subtitle': 'Prenota una demo gratuita e scopri come possiamo trasformare i tuoi risultati commerciali.'
-});
+    Object.assign(translations.it, {
+        'sales-boost-title': 'Spinta alle Vendite - HumanosTech',
+        'sales-boost-meta-desc': 'Servizi specializzati per aumentare le tue vendite con strategie personalizzate e un\'attenzione eccezionale.',
+        'sales-boost-hero-title': 'Spinta alle Vendite',
+        'sales-boost-hero-subtitle': 'Potenzia i tuoi risultati con strategie di vendita innovative e un team dedicato al tuo successo.',
+        'sales-boost-section-title': 'I Nostri Servizi di Spinta alle Vendite',
+        'sales-boost-section-subtitle': 'Progettiamo e implementiamo strategie che massimizzano le tue opportunità di vendita e fidelizzano i tuoi clienti.',
+        'sales-boost-service-1-title': 'Generazione di Lead Qualificati',
+        'sales-boost-service-1-desc': 'Identifichiamo e attiriamo prospect con alto potenziale di conversione per la tua attività.',
+        'feature-leads': 'Lead',
+        'feature-conversion': 'Conversione',
+        'sales-boost-service-2-title': 'Qualificazione e Nutrizione dei Lead',
+        'sales-boost-service-2-desc': 'Classifichiamo e coltiviamo i tuoi lead, preparandoli per la chiusura delle vendite con informazioni pertinenti.',
+        'feature-nurturing': 'Nutrizione',
+        'feature-qualification': 'Qualificazione',
+        'sales-boost-service-3-title': 'Chiusura delle Vendite e Post-Vendita',
+        'sales-boost-service-3-desc': 'Consulenza esperta nel processo di chiusura e follow-up post-vendita per garantire la soddisfazione del cliente.',
+        'feature-closing': 'Chiusura',
+        'feature-post-sales': 'Post-Vendita',
+        'sales-boost-service-4-title': 'Ottimizzazione dei Processi di Vendita',
+        'sales-boost-service-4-desc': 'Analizziamo e miglioriamo i tuoi funnel di vendita per identificare opportunità e aumentare l\'efficienza.',
+        'contact-cta-title': 'Pronto a far decollare le tue vendite?',
+        'contact-cta-subtitle': 'Prenota una demo gratuita e scopri come possiamo trasformare i tuoi risultati commerciali.'
+    });
 
-Object.assign(translations.de, {
-    'sales-boost-title': 'Verkaufsförderung - HumanosTech',
-    'sales-boost-meta-desc': 'Spezialisierte Dienstleistungen zur Steigerung Ihrer Verkäufe mit personalisierten Strategien und außergewöhnlicher Betreuung.',
-    'sales-boost-hero-title': 'Verkaufsförderung',
-    'sales-boost-hero-subtitle': 'Steigern Sie Ihre Ergebnisse mit innovativen Verkaufsstrategien und einem Team, das Ihrem Erfolg gewidmet ist.',
-    'sales-boost-section-title': 'Unsere Verkaufsförderungsdienste',
-    'sales-boost-section-subtitle': 'Wir entwickeln und implementieren Strategien, die Ihre Verkaufschancen maximieren und Ihre Kunden binden.',
-    'sales-boost-service-1-title': 'Generierung qualifizierter Leads',
-    'sales-boost-service-1-desc': 'Wir identifizieren und gewinnen Interessenten mit hohem Konversionspotenzial für Ihr Unternehmen.',
-    'feature-leads': 'Leads',
-    'feature-conversion': 'Konversion',
-    'sales-boost-service-2-title': 'Lead-Qualifizierung und -Pflege',
-    'sales-boost-service-2-desc': 'Wir klassifizieren und pflegen Ihre Leads und bereiten sie mit relevanten Informationen auf den Verkaufsabschluss vor.',
-    'feature-nurturing': 'Pflege',
-    'feature-qualification': 'Qualifizierung',
-    'sales-boost-service-3-title': 'Verkaufsabschluss und After-Sales',
-    'sales-boost-service-3-desc': 'Kompetente Beratung im Abschlussprozess und After-Sales-Betreuung zur Sicherstellung der Kundenzufriedenheit.',
-    'feature-closing': 'Abschluss',
-    'feature-post-sales': 'After-Sales',
-    'sales-boost-service-4-title': 'Optimierung der Verkaufsprozesse',
-    'sales-boost-service-4-desc': 'Wir analysieren und verbessern Ihre Verkaufstrichter, um Chancen zu identifizieren und die Effizienz zu steigern.',
-    'contact-cta-title': 'Bereit, Ihre Verkäufe anzukurbeln?',
-    'contact-cta-subtitle': 'Buchen Sie eine kostenlose Demo und entdecken Sie, wie wir Ihre Geschäftsergebnisse transformieren können.'
-});
+    Object.assign(translations.de, {
+        'sales-boost-title': 'Verkaufsförderung - HumanosTech',
+        'sales-boost-meta-desc': 'Spezialisierte Dienstleistungen zur Steigerung Ihrer Verkäufe mit personalisierten Strategien und außergewöhnlicher Betreuung.',
+        'sales-boost-hero-title': 'Verkaufsförderung',
+        'sales-boost-hero-subtitle': 'Steigern Sie Ihre Ergebnisse mit innovativen Verkaufsstrategien und einem Team, das Ihrem Erfolg gewidmet ist.',
+        'sales-boost-section-title': 'Unsere Verkaufsförderungsdienste',
+        'sales-boost-section-subtitle': 'Wir entwickeln und implementieren Strategien, die Ihre Verkaufschancen maximieren und Ihre Kunden binden.',
+        'sales-boost-service-1-title': 'Generierung qualifizierter Leads',
+        'sales-boost-service-1-desc': 'Wir identifizieren und gewinnen Interessenten mit hohem Konversionspotenzial für Ihr Unternehmen.',
+        'feature-leads': 'Leads',
+        'feature-conversion': 'Konversion',
+        'sales-boost-service-2-title': 'Lead-Qualifizierung und -Pflege',
+        'sales-boost-service-2-desc': 'Wir klassifizieren und pflegen Ihre Leads und bereiten sie mit relevanten Informationen auf den Verkaufsabschluss vor.',
+        'feature-nurturing': 'Pflege',
+        'feature-qualification': 'Qualifizierung',
+        'sales-boost-service-3-title': 'Verkaufsabschluss und After-Sales',
+        'sales-boost-service-3-desc': 'Kompetente Beratung im Abschlussprozess und After-Sales-Betreuung zur Sicherstellung der Kundenzufriedenheit.',
+        'feature-closing': 'Abschluss',
+        'feature-post-sales': 'After-Sales',
+        'sales-boost-service-4-title': 'Optimierung der Verkaufsprozesse',
+        'sales-boost-service-4-desc': 'Wir analysieren und verbessern Ihre Verkaufstrichter, um Chancen zu identifizieren und die Effizienz zu steigern.',
+        'contact-cta-title': 'Bereit, Ihre Verkäufe anzukurbeln?',
+        'contact-cta-subtitle': 'Buchen Sie eine kostenlose Demo und entdecken Sie, wie wir Ihre Geschäftsergebnisse transformieren können.'
+    });
 
 
 
 // About Us Page Translations
-Object.assign(translations.es, {
-    'about-us-title': 'Sobre Nosotros - HumanosTech',
-    'about-us-meta-desc': 'Conoce más sobre HumanosTech, nuestra misión, visión y el equipo que conecta el potencial humano con la eficiencia digital.',
-    'about-us-hero-title': 'Sobre Nosotros',
-    'about-us-hero-subtitle': 'Somos el puente que conecta el potencial humano con la eficiencia digital, transformando la manera en que las empresas crecen.',
-    'about-us-mission-title': 'Nuestra Misión',
-    'about-us-mission-desc': 'Conectamos empresas de cualquier escala con talento global especializado, creando soluciones que impulsan el crecimiento y la innovación. Creemos en el poder de las personas para transformar los negocios a través de la tecnología.',
-    'about-us-vision-title': 'Nuestra Visión',
-    'about-us-vision-desc': 'Ser la plataforma líder que democratiza el acceso al talento global, eliminando las barreras geográficas y creando oportunidades para empresas y profesionales en todo el mundo.',
-    'about-us-values-title': 'Nuestros Valores',
-    'about-us-value-1-title': 'Conexión Humana',
-    'about-us-value-1-desc': 'Valoramos las relaciones auténticas y la comunicación transparente en cada interacción.',
-    'about-us-value-2-title': 'Excelencia',
-    'about-us-value-2-desc': 'Nos comprometemos con la calidad superior en cada proyecto y servicio que ofrecemos.',
-    'about-us-value-3-title': 'Innovación',
-    'about-us-value-3-desc': 'Buscamos constantemente nuevas formas de mejorar y evolucionar nuestros servicios.',
-    'about-us-value-4-title': 'Transparencia',
-    'about-us-value-4-desc': 'Mantenemos comunicación clara y honesta en todas nuestras relaciones comerciales.',
-    'about-us-team-title': 'Nuestro Equipo',
-    'about-us-team-subtitle': 'Profesionales apasionados que trabajan para conectar el talento global con las oportunidades empresariales.',
-    'about-us-member-1-name': 'Mariela Yuri',
-    'about-us-member-1-role': 'CEO & Fundadora',
-    'about-us-member-1-desc': 'Experta en estrategia empresarial con más de 15 años conectando empresas con talento global.',
-    'about-us-member-2-name': 'Carlos Velázquez',
-    'about-us-member-2-role': 'Director de personal',
-    'about-us-member-2-desc': 'Geestión de equipos distribuidos globalmente.',
-    'about-us-member-3-name': 'Carlos Lohen',
-    'about-us-member-3-role': 'Director de Operaciones',
-    'about-us-member-3-desc': 'Especialista en optimización de procesos y gestión de sistemas integrados.',
-    'contact-cta-title': '¿Quieres conocer más sobre nosotros?',
-    'contact-cta-subtitle': 'Agenda una reunión y descubre cómo podemos ayudarte a alcanzar tus objetivos empresariales.'
-});
+    Object.assign(translations.es, {
+        'about-us-title': 'Sobre Nosotros - HumanosTech',
+        'about-us-meta-desc': 'Conoce más sobre HumanosTech, nuestra misión, visión y el equipo que conecta el potencial humano con la eficiencia digital.',
+        'about-us-hero-title': 'Sobre Nosotros',
+        'about-us-hero-subtitle': 'Somos el puente que conecta el potencial humano con la eficiencia digital, transformando la manera en que las empresas crecen.',
+        'about-us-mission-title': 'Nuestra Misión',
+        'about-us-mission-desc': 'Conectamos empresas de cualquier escala con talento global especializado, creando soluciones que impulsan el crecimiento y la innovación. Creemos en el poder de las personas para transformar los negocios a través de la tecnología.',
+        'about-us-vision-title': 'Nuestra Visión',
+        'about-us-vision-desc': 'Ser la plataforma líder que democratiza el acceso al talento global, eliminando las barreras geográficas y creando oportunidades para empresas y profesionales en todo el mundo.',
+        'about-us-values-title': 'Nuestros Valores',
+        'about-us-value-1-title': 'Conexión Humana',
+        'about-us-value-1-desc': 'Valoramos las relaciones auténticas y la comunicación transparente en cada interacción.',
+        'about-us-value-2-title': 'Excelencia',
+        'about-us-value-2-desc': 'Nos comprometemos con la calidad superior en cada proyecto y servicio que ofrecemos.',
+        'about-us-value-3-title': 'Innovación',
+        'about-us-value-3-desc': 'Buscamos constantemente nuevas formas de mejorar y evolucionar nuestros servicios.',
+        'about-us-value-4-title': 'Transparencia',
+        'about-us-value-4-desc': 'Mantenemos comunicación clara y honesta en todas nuestras relaciones comerciales.',
+        'about-us-team-title': 'Nuestro Equipo',
+        'about-us-team-subtitle': 'Profesionales apasionados que trabajan para conectar el talento global con las oportunidades empresariales.',
+        'about-us-member-1-name': 'Mariela Yuri',
+        'about-us-member-1-role': 'CEO & Fundadora',
+        'about-us-member-1-desc': 'Experta en estrategia empresarial con más de 15 años conectando empresas con talento global.',
+        'about-us-member-2-name': 'Carlos Velázquez',
+        'about-us-member-2-role': 'Director de personal',
+        'about-us-member-2-desc': 'Geestión de equipos distribuidos globalmente.',
+        'about-us-member-3-name': 'Carlos Lohen',
+        'about-us-member-3-role': 'Director de Operaciones',
+        'about-us-member-3-desc': 'Especialista en optimización de procesos y gestión de sistemas integrados.',
+        'contact-cta-title': '¿Quieres conocer más sobre nosotros?',
+        'contact-cta-subtitle': 'Agenda una reunión y descubre cómo podemos ayudarte a alcanzar tus objetivos empresariales.'
+    });
 
 // Careers Page Translations
-Object.assign(translations.es, {
-    'careers-title': 'Carreras - HumanosTech',
-    'careers-meta-desc': 'Únete a nuestro equipo global y forma parte de la revolución que conecta el talento humano con la tecnología.',
-    'careers-hero-title': 'Carreras',
-    'careers-hero-subtitle': 'Únete a nuestro equipo global y forma parte de la revolución que conecta el talento humano con la tecnología.',
-    'careers-section-title': 'Oportunidades Disponibles',
-    'careers-section-subtitle': 'Descubre posiciones que te permitirán crecer profesionalmente mientras impactas positivamente en empresas de todo el mundo.',
-    'careers-job-1-title': 'Especialista en Atención al Cliente',
-    'careers-job-1-department': 'Departamento de Servicios',
-    'careers-job-1-type': 'Tiempo Completo',
-    'careers-job-1-desc': 'Buscamos un profesional apasionado por brindar experiencias excepcionales a nuestros clientes, con habilidades de comunicación sobresalientes y capacidad para resolver problemas complejos.',
-    'careers-requirements-title': 'Requisitos:',
-    'careers-job-1-req-1': 'Experiencia mínima de 2 años en atención al cliente',
-    'careers-job-1-req-2': 'Dominio de inglés y español (otros idiomas son un plus)',
-    'careers-job-1-req-3': 'Excelentes habilidades de comunicación escrita y verbal',
-    'careers-job-1-req-4': 'Capacidad para trabajar en equipos remotos',
-    'careers-apply-btn': 'Aplicar Ahora',
-    'careers-job-2-title': 'Analista de Datos',
-    'careers-job-2-department': 'Departamento de Tecnología',
-    'careers-job-2-type': 'Tiempo Completo',
-    'careers-job-2-desc': 'Únete a nuestro equipo de datos para transformar información compleja en insights accionables que impulsen el crecimiento de nuestros clientes.',
-    'careers-job-2-req-1': 'Licenciatura en Estadística, Matemáticas o campo relacionado',
-    'careers-job-2-req-2': 'Experiencia con Python, R o SQL',
-    'careers-job-2-req-3': 'Conocimiento en visualización de datos (Tableau, Power BI)',
-    'careers-job-2-req-4': 'Pensamiento analítico y atención al detalle',
-    'careers-job-3-title': 'Coordinador de Proyectos',
-    'careers-job-3-department': 'Departamento de Operaciones',
-    'careers-job-3-type': 'Medio Tiempo',
-    'careers-job-3-desc': 'Buscamos un coordinador organizado y proactivo para gestionar proyectos multidisciplinarios y asegurar la entrega exitosa de soluciones a nuestros clientes.',
-    'careers-job-3-req-1': 'Experiencia en gestión de proyectos (PMP es un plus)',
-    'careers-job-3-req-2': 'Conocimiento de metodologías ágiles',
-    'careers-job-3-req-3': 'Excelentes habilidades organizacionales',
-    'careers-job-3-req-4': 'Capacidad para trabajar con equipos distribuidos',
-    'contact-cta-title': '¿No encuentras la posición ideal?',
-    'contact-cta-subtitle': 'Envíanos tu CV y te contactaremos cuando tengamos oportunidades que se ajusten a tu perfil.',
-    'careers-send-cv': 'Enviar CV'
-});
+    Object.assign(translations.es, {
+        'careers-title': 'Carreras - HumanosTech',
+        'careers-meta-desc': 'Únete a nuestro equipo global y forma parte de la revolución que conecta el talento humano con la tecnología.',
+        'careers-hero-title': 'Carreras',
+        'careers-hero-subtitle': 'Únete a nuestro equipo global y forma parte de la revolución que conecta el talento humano con la tecnología.',
+        'careers-section-title': 'Oportunidades Disponibles',
+        'careers-section-subtitle': 'Descubre posiciones que te permitirán crecer profesionalmente mientras impactas positivamente en empresas de todo el mundo.',
+        'careers-job-1-title': 'Especialista en Atención al Cliente',
+        'careers-job-1-department': 'Departamento de Servicios',
+        'careers-job-1-type': 'Tiempo Completo',
+        'careers-job-1-desc': 'Buscamos un profesional apasionado por brindar experiencias excepcionales a nuestros clientes, con habilidades de comunicación sobresalientes y capacidad para resolver problemas complejos.',
+        'careers-requirements-title': 'Requisitos:',
+        'careers-job-1-req-1': 'Experiencia mínima de 2 años en atención al cliente',
+        'careers-job-1-req-2': 'Dominio de inglés y español (otros idiomas son un plus)',
+        'careers-job-1-req-3': 'Excelentes habilidades de comunicación escrita y verbal',
+        'careers-job-1-req-4': 'Capacidad para trabajar en equipos remotos',
+        'careers-apply-btn': 'Aplicar Ahora',
+        'careers-job-2-title': 'Analista de Datos',
+        'careers-job-2-department': 'Departamento de Tecnología',
+        'careers-job-2-type': 'Tiempo Completo',
+        'careers-job-2-desc': 'Únete a nuestro equipo de datos para transformar información compleja en insights accionables que impulsen el crecimiento de nuestros clientes.',
+        'careers-job-2-req-1': 'Licenciatura en Estadística, Matemáticas o campo relacionado',
+        'careers-job-2-req-2': 'Experiencia con Python, R o SQL',
+        'careers-job-2-req-3': 'Conocimiento en visualización de datos (Tableau, Power BI)',
+        'careers-job-2-req-4': 'Pensamiento analítico y atención al detalle',
+        'careers-job-3-title': 'Coordinador de Proyectos',
+        'careers-job-3-department': 'Departamento de Operaciones',
+        'careers-job-3-type': 'Medio Tiempo',
+        'careers-job-3-desc': 'Buscamos un coordinador organizado y proactivo para gestionar proyectos multidisciplinarios y asegurar la entrega exitosa de soluciones a nuestros clientes.',
+        'careers-job-3-req-1': 'Experiencia en gestión de proyectos (PMP es un plus)',
+        'careers-job-3-req-2': 'Conocimiento de metodologías ágiles',
+        'careers-job-3-req-3': 'Excelentes habilidades organizacionales',
+        'careers-job-3-req-4': 'Capacidad para trabajar con equipos distribuidos',
+        'contact-cta-title': '¿No encuentras la posición ideal?',
+        'contact-cta-subtitle': 'Envíanos tu CV y te contactaremos cuando tengamos oportunidades que se ajusten a tu perfil.',
+        'careers-send-cv': 'Enviar CV'
+    });
 
 // Blog Page Translations
-Object.assign(translations.es, {
-    'blog-title': 'Blog - HumanosTech',
-    'blog-meta-desc': 'Descubre insights, tendencias y mejores prácticas sobre el futuro del trabajo remoto y la gestión de talento global.',
-    'blog-hero-title': 'Blog',
-    'blog-hero-subtitle': 'Descubre insights, tendencias y mejores prácticas sobre el futuro del trabajo remoto y la gestión de talento global.',
-    'blog-section-title': 'Últimas Publicaciones',
-    'blog-section-subtitle': 'Mantente al día con las últimas tendencias y estrategias en gestión de talento y trabajo remoto.',
-    'blog-post-1-category': 'Trabajo Remoto',
-    'blog-post-1-date': '15 Enero 2025',
-    'blog-post-1-title': 'El Futuro del Trabajo Remoto: Tendencias para 2025',
-    'blog-post-1-excerpt': 'Exploramos las principales tendencias que definirán el trabajo remoto en 2025, desde nuevas tecnologías hasta cambios en la cultura empresarial.',
-    'blog-read-more': 'Leer más',
-    'blog-post-2-category': 'Gestión de Talento',
-    'blog-post-2-date': '10 Enero 2025',
-    'blog-post-2-title': 'Cómo Construir Equipos Globales Efectivos',
-    'blog-post-2-excerpt': 'Estrategias probadas para formar y gestionar equipos distribuidos que maximicen la productividad y la colaboración.',
-    'blog-post-3-category': 'Tecnología',
-    'blog-post-3-date': '5 Enero 2025',
-    'blog-post-3-title': 'IA y Automatización en la Gestión de Datos',
-    'blog-post-3-excerpt': 'Descubre cómo la inteligencia artificial está revolucionando el procesamiento y análisis de datos empresariales.',
-    'blog-post-4-category': 'Atención al Cliente',
-    'blog-post-4-date': '28 Diciembre 2024',
-    'blog-post-4-title': 'Estrategias de Atención al Cliente Multicanal',
-    'blog-post-4-excerpt': 'Mejores prácticas para ofrecer una experiencia de cliente excepcional a través de múltiples canales de comunicación.',
-    'blog-post-5-category': 'Productividad',
-    'blog-post-5-date': '20 Diciembre 2024',
-    'blog-post-5-title': 'Optimización de Procesos Administrativos',
-    'blog-post-5-excerpt': 'Técnicas y herramientas para automatizar y optimizar las tareas administrativas más comunes en las empresas.',
-    'blog-post-6-category': 'Ventas',
-    'blog-post-6-date': '15 Diciembre 2024',
-    'blog-post-6-title': 'Técnicas de Generación de Leads en 2025',
-    'blog-post-6-excerpt': 'Estrategias innovadoras para identificar y convertir prospectos de alta calidad en el entorno digital actual.',
-    'contact-cta-title': '¿Quieres estar al día?',
-    'contact-cta-subtitle': 'Suscríbete a nuestro newsletter y recibe los últimos insights directamente en tu bandeja de entrada.',
-    'blog-subscribe': 'Suscribirse'
-});
+    Object.assign(translations.es, {
+        'blog-title': 'Blog - HumanosTech',
+        'blog-meta-desc': 'Descubre insights, tendencias y mejores prácticas sobre el futuro del trabajo remoto y la gestión de talento global.',
+        'blog-hero-title': 'Blog',
+        'blog-hero-subtitle': 'Descubre insights, tendencias y mejores prácticas sobre el futuro del trabajo remoto y la gestión de talento global.',
+        'blog-section-title': 'Últimas Publicaciones',
+        'blog-section-subtitle': 'Mantente al día con las últimas tendencias y estrategias en gestión de talento y trabajo remoto.',
+        'blog-post-1-category': 'Trabajo Remoto',
+        'blog-post-1-date': '15 Enero 2025',
+        'blog-post-1-title': 'El Futuro del Trabajo Remoto: Tendencias para 2025',
+        'blog-post-1-excerpt': 'Exploramos las principales tendencias que definirán el trabajo remoto en 2025, desde nuevas tecnologías hasta cambios en la cultura empresarial.',
+        'blog-read-more': 'Leer más',
+        'blog-post-2-category': 'Gestión de Talento',
+        'blog-post-2-date': '10 Enero 2025',
+        'blog-post-2-title': 'Cómo Construir Equipos Globales Efectivos',
+        'blog-post-2-excerpt': 'Estrategias probadas para formar y gestionar equipos distribuidos que maximicen la productividad y la colaboración.',
+        'blog-post-3-category': 'Tecnología',
+        'blog-post-3-date': '5 Enero 2025',
+        'blog-post-3-title': 'IA y Automatización en la Gestión de Datos',
+        'blog-post-3-excerpt': 'Descubre cómo la inteligencia artificial está revolucionando el procesamiento y análisis de datos empresariales.',
+        'blog-post-4-category': 'Atención al Cliente',
+        'blog-post-4-date': '28 Diciembre 2024',
+        'blog-post-4-title': 'Estrategias de Atención al Cliente Multicanal',
+        'blog-post-4-excerpt': 'Mejores prácticas para ofrecer una experiencia de cliente excepcional a través de múltiples canales de comunicación.',
+        'blog-post-5-category': 'Productividad',
+        'blog-post-5-date': '20 Diciembre 2024',
+        'blog-post-5-title': 'Optimización de Procesos Administrativos',
+        'blog-post-5-excerpt': 'Técnicas y herramientas para automatizar y optimizar las tareas administrativas más comunes en las empresas.',
+        'blog-post-6-category': 'Ventas',
+        'blog-post-6-date': '15 Diciembre 2024',
+        'blog-post-6-title': 'Técnicas de Generación de Leads en 2025',
+        'blog-post-6-excerpt': 'Estrategias innovadoras para identificar y convertir prospectos de alta calidad en el entorno digital actual.',
+        'contact-cta-title': '¿Quieres estar al día?',
+        'contact-cta-subtitle': 'Suscríbete a nuestro newsletter y recibe los últimos insights directamente en tu bandeja de entrada.',
+        'blog-subscribe': 'Suscribirse'
+    });
 
 // Legal Pages Translations
-Object.assign(translations.es, {
-    'privacy-policy-title': 'Política de Privacidad - HumanosTech',
-    'privacy-policy-meta-desc': 'Conoce cómo HumanosTech protege y maneja tu información personal de acuerdo con las mejores prácticas de privacidad.',
-    'privacy-policy-hero-title': 'Política de Privacidad',
-    'privacy-policy-hero-subtitle': 'Tu privacidad es nuestra prioridad. Conoce cómo protegemos y manejamos tu información personal.',
-    'privacy-policy-last-updated': 'Última actualización: 1 de enero de 2025',
-    'privacy-policy-section-1-title': '1. Información que Recopilamos',
-    'privacy-policy-section-1-content': 'Recopilamos información que nos proporcionas directamente, como cuando te registras en nuestros servicios, nos contactas o utilizas nuestras plataformas. Esta información puede incluir tu nombre, dirección de correo electrónico, número de teléfono, información de la empresa y cualquier otra información que elijas compartir con nosotros.',
-    'terms-of-service-title': 'Términos de Servicio - HumanosTech',
-    'terms-of-service-meta-desc': 'Conoce los términos y condiciones que rigen el uso de los servicios de HumanosTech.',
-    'terms-of-service-hero-title': 'Términos de Servicio',
-    'terms-of-service-hero-subtitle': 'Conoce los términos y condiciones que rigen el uso de nuestros servicios y plataformas.',
-    'terms-of-service-last-updated': 'Última actualización: 1 de enero de 2025',
-    'cookies-title': 'Política de Cookies - HumanosTech',
-    'cookies-meta-desc': 'Información sobre el uso de cookies en el sitio web de HumanosTech y cómo gestionarlas.',
-    'cookies-hero-title': 'Política de Cookies',
-    'cookies-hero-subtitle': 'Información sobre cómo utilizamos las cookies para mejorar tu experiencia en nuestro sitio web.',
-    'cookies-last-updated': 'Última actualización: 1 de enero de 2025'
-});
+    Object.assign(translations.es, {
+        'privacy-policy-title': 'Política de Privacidad - HumanosTech',
+        'privacy-policy-meta-desc': 'Conoce cómo HumanosTech protege y maneja tu información personal de acuerdo con las mejores prácticas de privacidad.',
+        'privacy-policy-hero-title': 'Política de Privacidad',
+        'privacy-policy-hero-subtitle': 'Tu privacidad es nuestra prioridad. Conoce cómo protegemos y manejamos tu información personal.',
+        'privacy-policy-last-updated': 'Última actualización: 1 de enero de 2025',
+        'privacy-policy-section-1-title': '1. Información que Recopilamos',
+        'privacy-policy-section-1-content': 'Recopilamos información que nos proporcionas directamente, como cuando te registras en nuestros servicios, nos contactas o utilizas nuestras plataformas. Esta información puede incluir tu nombre, dirección de correo electrónico, número de teléfono, información de la empresa y cualquier otra información que elijas compartir con nosotros.',
+        'terms-of-service-title': 'Términos de Servicio - HumanosTech',
+        'terms-of-service-meta-desc': 'Conoce los términos y condiciones que rigen el uso de los servicios de HumanosTech.',
+        'terms-of-service-hero-title': 'Términos de Servicio',
+        'terms-of-service-hero-subtitle': 'Conoce los términos y condiciones que rigen el uso de nuestros servicios y plataformas.',
+        'terms-of-service-last-updated': 'Última actualización: 1 de enero de 2025',
+        'cookies-title': 'Política de Cookies - HumanosTech',
+        'cookies-meta-desc': 'Información sobre el uso de cookies en el sitio web de HumanosTech y cómo gestionarlas.',
+        'cookies-hero-title': 'Política de Cookies',
+        'cookies-hero-subtitle': 'Información sobre cómo utilizamos las cookies para mejorar tu experiencia en nuestro sitio web.',
+        'cookies-last-updated': 'Última actualización: 1 de enero de 2025'
+    });
 
 // Contact Page Translations
-Object.assign(translations.es, {
-    'contact-title': 'Contacto - HumanosTech',
-    'contact-meta-desc': 'Ponte en contacto con HumanosTech. Agenda una demo gratuita y descubre cómo podemos transformar tu negocio.',
-    'contact-hero-title': 'Contacto',
-    'contact-hero-subtitle': '¿Listo para transformar tu negocio? Ponte en contacto con nosotros y descubre cómo podemos ayudarte.',
-    'contact-info-title': 'Información de Contacto',
-    'contact-info-desc': 'Estamos aquí para ayudarte. Contáctanos a través de cualquiera de estos medios o utiliza el formulario para enviarnos un mensaje.',
-    'contact-email-title': 'Email',
-    'contact-phone-title': 'Teléfono',
-    'contact-phone-hours': 'Lunes a Viernes: 9:00 - 18:00',
-    'contact-address-title': 'Dirección',
-    'contact-form-title': 'Envíanos un Mensaje',
-    'contact-form-name': 'Nombre *',
-    'contact-form-email': 'Email *',
-    'contact-form-company': 'Empresa',
-    'contact-form-phone': 'Teléfono',
-    'contact-form-service': 'Servicio de Interés',
-    'contact-form-service-select': 'Selecciona un servicio',
-    'contact-form-service-data': 'Procesamiento de Datos',
-    'contact-form-service-support': 'Atención al Cliente',
-    'contact-form-service-admin': 'Gestión Administrativa',
-    'contact-form-service-sales': 'Impulso de Ventas',
-    'contact-form-service-other': 'Otro',
-    'contact-form-message': 'Mensaje *',
-    'contact-form-privacy': 'Acepto la <a href="privacy-policy.html">Política de Privacidad</a> *',
-    'contact-form-newsletter': 'Quiero recibir noticias y actualizaciones por email',
-    'contact-form-submit': 'Enviar Mensaje',
-    'contact-cta-title': '¿Prefieres una Demo en Vivo?',
-    'contact-cta-subtitle': 'Agenda una demostración personalizada de 30 minutos y descubre cómo nuestros servicios pueden transformar tu negocio.',
-    'contact-schedule-demo': 'Agendar Demo'
-});
+    Object.assign(translations.es, {
+        'contact-title': 'Contacto - HumanosTech',
+        'contact-meta-desc': 'Ponte en contacto con HumanosTech. Agenda una demo gratuita y descubre cómo podemos transformar tu negocio.',
+        'contact-hero-title': 'Contacto',
+        'contact-hero-subtitle': '¿Listo para transformar tu negocio? Ponte en contacto con nosotros y descubre cómo podemos ayudarte.',
+        'contact-info-title': 'Información de Contacto',
+        'contact-info-desc': 'Estamos aquí para ayudarte. Contáctanos a través de cualquiera de estos medios o utiliza el formulario para enviarnos un mensaje.',
+        'contact-email-title': 'Email',
+        'contact-phone-title': 'Teléfono',
+        'contact-phone-hours': 'Lunes a Viernes: 9:00 - 18:00',
+        'contact-address-title': 'Dirección',
+        'contact-form-title': 'Envíanos un Mensaje',
+        'contact-form-name': 'Nombre *',
+        'contact-form-email': 'Email *',
+        'contact-form-company': 'Empresa',
+        'contact-form-phone': 'Teléfono',
+        'contact-form-service': 'Servicio de Interés',
+        'contact-form-service-select': 'Selecciona un servicio',
+        'contact-form-service-data': 'Procesamiento de Datos',
+        'contact-form-service-support': 'Atención al Cliente',
+        'contact-form-service-admin': 'Gestión Administrativa',
+        'contact-form-service-sales': 'Impulso de Ventas',
+        'contact-form-service-other': 'Otro',
+        'contact-form-message': 'Mensaje *',
+        'contact-form-privacy': 'Acepto la <a href="privacy-policy.html">Política de Privacidad</a> *',
+        'contact-form-newsletter': 'Quiero recibir noticias y actualizaciones por email',
+        'contact-form-submit': 'Enviar Mensaje',
+        'contact-cta-title': '¿Prefieres una Demo en Vivo?',
+        'contact-cta-subtitle': 'Agenda una demostración personalizada de 30 minutos y descubre cómo nuestros servicios pueden transformar tu negocio.',
+        'contact-schedule-demo': 'Agendar Demo'
+    });
 
 // Add English translations for all new pages
 Object.assign(translations.en, {
     // About Us
-    'about-us-title': 'About Us - HumanosTech',
-    'about-us-meta-desc': 'Learn more about HumanosTech, our mission, vision and the team that connects human potential with digital efficiency.',
-    'about-us-hero-title': 'About Us',
-    'about-us-hero-subtitle': 'We are the bridge that connects human potential with digital efficiency, transforming the way companies grow.',
-    'about-us-mission-title': 'Our Mission',
-    'about-us-mission-desc': 'We connect companies of any scale with specialized global talent, creating solutions that drive growth and innovation. We believe in the power of people to transform businesses through technology.',
-    'about-us-vision-title': 'Our Vision',
-    'about-us-vision-desc': 'To be the leading platform that democratizes access to global talent, eliminating geographical barriers and creating opportunities for companies and professionals worldwide.',
-    'about-us-values-title': 'Our Values',
-    'about-us-value-1-title': 'Human Connection',
-    'about-us-value-1-desc': 'We value authentic relationships and transparent communication in every interaction.',
-    'about-us-value-2-title': 'Excellence',
-    'about-us-value-2-desc': 'We commit to superior quality in every project and service we offer.',
-    'about-us-value-3-title': 'Innovation',
-    'about-us-value-3-desc': 'We constantly seek new ways to improve and evolve our services.',
-    'about-us-value-4-title': 'Transparency',
-    'about-us-value-4-desc': 'We maintain clear and honest communication in all our business relationships.',
-    'about-us-team-title': 'Our Team',
-    'about-us-team-subtitle': 'Passionate professionals working to connect global talent with business opportunities.',
-    'about-us-member-1-name': 'Mariela Yuri',
-    'about-us-member-1-role': 'CEO & Founder',
-    'about-us-member-1-desc': 'Business strategy expert with over 15 years connecting companies with global talent.',
-    'about-us-member-2-name': 'Carlos Velázquez',
-    'about-us-member-2-role': 'Team Director',
-    'about-us-member-2-desc': 'Specialist in Management of globally distributed teams.',
-    'about-us-member-3-name': 'Carlos Lohen',
-    'about-us-member-3-role': 'Operations Director',
-    'about-us-member-3-desc': 'Specialist in process optimization in scalable platforms and innovative technological solutions.',
-    'contact-cta-title': 'Want to know more about us?',
-    'contact-cta-subtitle': 'Schedule a meeting and discover how we can help you achieve your business goals.',
+        'about-us-title': 'About Us - HumanosTech',
+        'about-us-meta-desc': 'Learn more about HumanosTech, our mission, vision and the team that connects human potential with digital efficiency.',
+        'about-us-hero-title': 'About Us',
+        'about-us-hero-subtitle': 'We are the bridge that connects human potential with digital efficiency, transforming the way companies grow.',
+        'about-us-mission-title': 'Our Mission',
+        'about-us-mission-desc': 'We connect companies of any scale with specialized global talent, creating solutions that drive growth and innovation. We believe in the power of people to transform businesses through technology.',
+        'about-us-vision-title': 'Our Vision',
+        'about-us-vision-desc': 'To be the leading platform that democratizes access to global talent, eliminating geographical barriers and creating opportunities for companies and professionals worldwide.',
+        'about-us-values-title': 'Our Values',
+        'about-us-value-1-title': 'Human Connection',
+        'about-us-value-1-desc': 'We value authentic relationships and transparent communication in every interaction.',
+        'about-us-value-2-title': 'Excellence',
+        'about-us-value-2-desc': 'We commit to superior quality in every project and service we offer.',
+        'about-us-value-3-title': 'Innovation',
+        'about-us-value-3-desc': 'We constantly seek new ways to improve and evolve our services.',
+        'about-us-value-4-title': 'Transparency',
+        'about-us-value-4-desc': 'We maintain clear and honest communication in all our business relationships.',
+        'about-us-team-title': 'Our Team',
+        'about-us-team-subtitle': 'Passionate professionals working to connect global talent with business opportunities.',
+        'about-us-member-1-name': 'Mariela Yuri',
+        'about-us-member-1-role': 'CEO & Founder',
+        'about-us-member-1-desc': 'Business strategy expert with over 15 years connecting companies with global talent.',
+        'about-us-member-2-name': 'Carlos Velázquez',
+        'about-us-member-2-role': 'Team Director',
+        'about-us-member-2-desc': 'Specialist in Management of globally distributed teams.',
+        'about-us-member-3-name': 'Carlos Lohen',
+        'about-us-member-3-role': 'Operations Director',
+        'about-us-member-3-desc': 'Specialist in process optimization in scalable platforms and innovative technological solutions.',
+        'contact-cta-title': 'Want to know more about us?',
+        'contact-cta-subtitle': 'Schedule a meeting and discover how we can help you achieve your business goals.',
     
     // Careers
-    'careers-title': 'Careers - HumanosTech',
-    'careers-meta-desc': 'Join our global team and be part of the revolution that connects human talent with technology.',
-    'careers-hero-title': 'Careers',
-    'careers-hero-subtitle': 'Join our global team and be part of the revolution that connects human talent with technology.',
-    'careers-section-title': 'Available Opportunities',
-    'careers-section-subtitle': 'Discover positions that will allow you to grow professionally while positively impacting companies worldwide.',
-    'careers-job-1-title': 'Customer Support Specialist',
-    'careers-job-1-department': 'Services Department',
-    'careers-job-1-type': 'Full Time',
-    'careers-job-1-desc': 'We seek a professional passionate about providing exceptional experiences to our customers, with outstanding communication skills and ability to solve complex problems.',
-    'careers-requirements-title': 'Requirements:',
-    'careers-job-1-req-1': 'Minimum 2 years experience in customer service',
-    'careers-job-1-req-2': 'Fluency in English and Spanish (other languages are a plus)',
-    'careers-job-1-req-3': 'Excellent written and verbal communication skills',
-    'careers-job-1-req-4': 'Ability to work in remote teams',
-    'careers-apply-btn': 'Apply Now',
-    'careers-job-2-title': 'Data Analyst',
-    'careers-job-2-department': 'Technology Department',
-    'careers-job-2-type': 'Full Time',
-    'careers-job-2-desc': 'Join our data team to transform complex information into actionable insights that drive our clients\' growth.',
-    'careers-job-2-req-1': 'Bachelor\'s degree in Statistics, Mathematics or related field',
-    'careers-job-2-req-2': 'Experience with Python, R or SQL',
-    'careers-job-2-req-3': 'Knowledge in data visualization (Tableau, Power BI)',
-    'careers-job-2-req-4': 'Analytical thinking and attention to detail',
-    'careers-job-3-title': 'Project Coordinator',
-    'careers-job-3-department': 'Operations Department',
-    'careers-job-3-type': 'Part Time',
-    'careers-job-3-desc': 'We seek an organized and proactive coordinator to manage multidisciplinary projects and ensure successful delivery of solutions to our clients.',
-    'careers-job-3-req-1': 'Experience in project management (PMP is a plus)',
-    'careers-job-3-req-2': 'Knowledge of agile methodologies',
-    'careers-job-3-req-3': 'Excellent organizational skills',
-    'careers-job-3-req-4': 'Ability to work with distributed teams',
-    'contact-cta-title': 'Can\'t find the ideal position?',
-    'contact-cta-subtitle': 'Send us your CV and we\'ll contact you when we have opportunities that match your profile.',
-    'careers-send-cv': 'Send CV',
+        'careers-title': 'Careers - HumanosTech',
+        'careers-meta-desc': 'Join our global team and be part of the revolution that connects human talent with technology.',
+        'careers-hero-title': 'Careers',
+        'careers-hero-subtitle': 'Join our global team and be part of the revolution that connects human talent with technology.',
+        'careers-section-title': 'Available Opportunities',
+        'careers-section-subtitle': 'Discover positions that will allow you to grow professionally while positively impacting companies worldwide.',
+        'careers-job-1-title': 'Customer Support Specialist',
+        'careers-job-1-department': 'Services Department',
+        'careers-job-1-type': 'Full Time',
+        'careers-job-1-desc': 'We seek a professional passionate about providing exceptional experiences to our customers, with outstanding communication skills and ability to solve complex problems.',
+        'careers-requirements-title': 'Requirements:',
+        'careers-job-1-req-1': 'Minimum 2 years experience in customer service',
+        'careers-job-1-req-2': 'Fluency in English and Spanish (other languages are a plus)',
+        'careers-job-1-req-3': 'Excellent written and verbal communication skills',
+        'careers-job-1-req-4': 'Ability to work in remote teams',
+        'careers-apply-btn': 'Apply Now',
+        'careers-job-2-title': 'Data Analyst',
+        'careers-job-2-department': 'Technology Department',
+        'careers-job-2-type': 'Full Time',
+        'careers-job-2-desc': 'Join our data team to transform complex information into actionable insights that drive our clients\' growth.',
+        'careers-job-2-req-1': 'Bachelor\'s degree in Statistics, Mathematics or related field',
+        'careers-job-2-req-2': 'Experience with Python, R or SQL',
+        'careers-job-2-req-3': 'Knowledge in data visualization (Tableau, Power BI)',
+        'careers-job-2-req-4': 'Analytical thinking and attention to detail',
+        'careers-job-3-title': 'Project Coordinator',
+        'careers-job-3-department': 'Operations Department',
+        'careers-job-3-type': 'Part Time',
+        'careers-job-3-desc': 'We seek an organized and proactive coordinator to manage multidisciplinary projects and ensure successful delivery of solutions to our clients.',
+        'careers-job-3-req-1': 'Experience in project management (PMP is a plus)',
+        'careers-job-3-req-2': 'Knowledge of agile methodologies',
+        'careers-job-3-req-3': 'Excellent organizational skills',
+        'careers-job-3-req-4': 'Ability to work with distributed teams',
+        'contact-cta-title': 'Can\'t find the ideal position?',
+        'contact-cta-subtitle': 'Send us your CV and we\'ll contact you when we have opportunities that match your profile.',
+        'careers-send-cv': 'Send CV',
     
     // Blog
-    'blog-title': 'Blog - HumanosTech',
-    'blog-meta-desc': 'Discover insights, trends and best practices about the future of remote work and global talent management.',
-    'blog-hero-title': 'Blog',
-    'blog-hero-subtitle': 'Discover insights, trends and best practices about the future of remote work and global talent management.',
-    'blog-section-title': 'Latest Posts',
-    'blog-section-subtitle': 'Stay up to date with the latest trends and strategies in talent management and remote work.',
-    'blog-post-1-category': 'Remote Work',
-    'blog-post-1-date': 'January 15, 2025',
-    'blog-post-1-title': 'The Future of Remote Work: Trends for 2025',
-    'blog-post-1-excerpt': 'We explore the main trends that will define remote work in 2025, from new technologies to changes in business culture.',
-    'blog-read-more': 'Read more',
-    'blog-post-2-category': 'Talent Management',
-    'blog-post-2-date': 'January 10, 2025',
-    'blog-post-2-title': 'How to Build Effective Global Teams',
-    'blog-post-2-excerpt': 'Proven strategies to form and manage distributed teams that maximize productivity and collaboration.',
-    'blog-post-3-category': 'Technology',
-    'blog-post-3-date': 'January 5, 2025',
-    'blog-post-3-title': 'AI and Automation in Data Management',
-    'blog-post-3-excerpt': 'Discover how artificial intelligence is revolutionizing business data processing and analysis.',
-    'blog-post-4-category': 'Customer Service',
-    'blog-post-4-date': 'December 28, 2024',
-    'blog-post-4-title': 'Multichannel Customer Service Strategies',
-    'blog-post-4-excerpt': 'Best practices to offer exceptional customer experience through multiple communication channels.',
-    'blog-post-5-category': 'Productivity',
-    'blog-post-5-date': 'December 20, 2024',
-    'blog-post-5-title': 'Administrative Process Optimization',
-    'blog-post-5-excerpt': 'Techniques and tools to automate and optimize the most common administrative tasks in companies.',
-    'blog-post-6-category': 'Sales',
-    'blog-post-6-date': 'December 15, 2024',
-    'blog-post-6-title': 'Lead Generation Techniques in 2025',
-    'blog-post-6-excerpt': 'Innovative strategies to identify and convert high-quality prospects in today\'s digital environment.',
-    'contact-cta-title': 'Want to stay updated?',
-    'contact-cta-subtitle': 'Subscribe to our newsletter and receive the latest insights directly in your inbox.',
-    'blog-subscribe': 'Subscribe',
+        'blog-title': 'Blog - HumanosTech',
+        'blog-meta-desc': 'Discover insights, trends and best practices about the future of remote work and global talent management.',
+        'blog-hero-title': 'Blog',
+        'blog-hero-subtitle': 'Discover insights, trends and best practices about the future of remote work and global talent management.',
+        'blog-section-title': 'Latest Posts',
+        'blog-section-subtitle': 'Stay up to date with the latest trends and strategies in talent management and remote work.',
+        'blog-post-1-category': 'Remote Work',
+        'blog-post-1-date': 'January 15, 2025',
+        'blog-post-1-title': 'The Future of Remote Work: Trends for 2025',
+        'blog-post-1-excerpt': 'We explore the main trends that will define remote work in 2025, from new technologies to changes in business culture.',
+        'blog-read-more': 'Read more',
+        'blog-post-2-category': 'Talent Management',
+        'blog-post-2-date': 'January 10, 2025',
+        'blog-post-2-title': 'How to Build Effective Global Teams',
+        'blog-post-2-excerpt': 'Proven strategies to form and manage distributed teams that maximize productivity and collaboration.',
+        'blog-post-3-category': 'Technology',
+        'blog-post-3-date': 'January 5, 2025',
+        'blog-post-3-title': 'AI and Automation in Data Management',
+        'blog-post-3-excerpt': 'Discover how artificial intelligence is revolutionizing business data processing and analysis.',
+        'blog-post-4-category': 'Customer Service',
+        'blog-post-4-date': 'December 28, 2024',
+        'blog-post-4-title': 'Multichannel Customer Service Strategies',
+        'blog-post-4-excerpt': 'Best practices to offer exceptional customer experience through multiple communication channels.',
+        'blog-post-5-category': 'Productivity',
+        'blog-post-5-date': 'December 20, 2024',
+        'blog-post-5-title': 'Administrative Process Optimization',
+        'blog-post-5-excerpt': 'Techniques and tools to automate and optimize the most common administrative tasks in companies.',
+        'blog-post-6-category': 'Sales',
+        'blog-post-6-date': 'December 15, 2024',
+        'blog-post-6-title': 'Lead Generation Techniques in 2025',
+        'blog-post-6-excerpt': 'Innovative strategies to identify and convert high-quality prospects in today\'s digital environment.',
+        'contact-cta-title': 'Want to stay updated?',
+        'contact-cta-subtitle': 'Subscribe to our newsletter and receive the latest insights directly in your inbox.',
+        'blog-subscribe': 'Subscribe',
     
     // Contact
-    'contact-title': 'Contact - HumanosTech',
-    'contact-meta-desc': 'Get in touch with HumanosTech. Schedule a free demo and discover how we can transform your business.',
-    'contact-hero-title': 'Contact',
-    'contact-hero-subtitle': 'Ready to transform your business? Get in touch with us and discover how we can help you.',
-    'contact-info-title': 'Contact Information',
-    'contact-info-desc': 'We are here to help you. Contact us through any of these means or use the form to send us a message.',
-    'contact-email-title': 'Email',
-    'contact-phone-title': 'Phone',
-    'contact-phone-hours': 'Monday to Friday: 9:00 - 18:00',
-    'contact-address-title': 'Address',
-    'contact-form-title': 'Send us a Message',
-    'contact-form-name': 'Name *',
-    'contact-form-email': 'Email *',
-    'contact-form-company': 'Company',
-    'contact-form-phone': 'Phone',
-    'contact-form-service': 'Service of Interest',
-    'contact-form-service-select': 'Select a service',
-    'contact-form-service-data': 'Data Processing',
-    'contact-form-service-support': 'Customer Support',
-    'contact-form-service-admin': 'Administrative Management',
-    'contact-form-service-sales': 'Sales Boost',
-    'contact-form-service-other': 'Other',
-    'contact-form-message': 'Message *',
-    'contact-form-privacy': 'I accept the <a href="privacy-policy.html">Privacy Policy</a> *',
-    'contact-form-newsletter': 'I want to receive news and updates by email',
-    'contact-form-submit': 'Send Message',
-    'contact-cta-title': 'Prefer a Live Demo?',
-    'contact-cta-subtitle': 'Schedule a personalized 30-minute demonstration and discover how our services can transform your business.',
-    'contact-schedule-demo': 'Schedule Demo'
+        'contact-title': 'Contact - HumanosTech',
+        'contact-meta-desc': 'Get in touch with HumanosTech. Schedule a free demo and discover how we can transform your business.',
+        'contact-hero-title': 'Contact',
+        'contact-hero-subtitle': 'Ready to transform your business? Get in touch with us and discover how we can help you.',
+        'contact-info-title': 'Contact Information',
+        'contact-info-desc': 'We are here to help you. Contact us through any of these means or use the form to send us a message.',
+        'contact-email-title': 'Email',
+        'contact-phone-title': 'Phone',
+        'contact-phone-hours': 'Monday to Friday: 9:00 - 18:00',
+        'contact-address-title': 'Address',
+        'contact-form-title': 'Send us a Message',
+        'contact-form-name': 'Name *',
+        'contact-form-email': 'Email *',
+        'contact-form-company': 'Company',
+        'contact-form-phone': 'Phone',
+        'contact-form-service': 'Service of Interest',
+        'contact-form-service-select': 'Select a service',
+        'contact-form-service-data': 'Data Processing',
+        'contact-form-service-support': 'Customer Support',
+        'contact-form-service-admin': 'Administrative Management',
+        'contact-form-service-sales': 'Sales Boost',
+        'contact-form-service-other': 'Other',
+        'contact-form-message': 'Message *',
+        'contact-form-privacy': 'I accept the <a href="privacy-policy.html">Privacy Policy</a> *',
+        'contact-form-newsletter': 'I want to receive news and updates by email',
+        'contact-form-submit': 'Send Message',
+        'contact-cta-title': 'Prefer a Live Demo?',
+        'contact-cta-subtitle': 'Schedule a personalized 30-minute demonstration and discover how our services can transform your business.',
+        'contact-schedule-demo': 'Schedule Demo'
 });
 
 // Adicionar similar translations for French, Portuguese, Italian and German...
-// 
 
 Object.assign(translations.fr, {
     'about-us-hero-title': 'À Propos de Nous',

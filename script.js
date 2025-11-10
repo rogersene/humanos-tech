@@ -456,6 +456,8 @@ const translations = {
         'nav-inicio': 'Início',
         'nav-servicios': 'Serviços',
         'nav-nosotros': 'Sobre Nós',
+        'nav-nosotros': 'Sobre Nós',
+        'nav-equipo': 'Equipe',
         'nav-talento': 'Talento',
         'nav-contacto': 'Contato',
         'cta-demo': 'Agendar Demo',
@@ -907,6 +909,25 @@ const navMenu = document.getElementById('nav-menu');
 const langButtons = document.querySelectorAll('.language-selector .lang-btn');
 const demoForm = document.getElementById('demo-form');
 
+
+// Language Selector Hover Behavior
+
+document.addEventListener("DOMContentLoaded", () => {
+        const selector = document.querySelector(".language-selector");
+        let hideTimeout;
+
+        selector.addEventListener("mouseenter", () => {
+            clearTimeout(hideTimeout);
+            selector.classList.add("show");
+        });
+
+        selector.addEventListener("mouseleave", () => {
+            hideTimeout = setTimeout(() => {
+            selector.classList.remove("show");
+            }, 200); // atraso de 200ms antes de esconder
+        });
+});
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     initializeLanguage();
@@ -1123,39 +1144,43 @@ function initializeForm() {
     if (!demoForm) return;
     
     // Form validation and submission
-    demoForm.addEventListener('submit', async (e) => {
+    demoForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const formData = new FormData(demoForm);
+        const data = Object.fromEntries(formData.entries());
+
+        if (!validateForm(data)) return;
+
         const submitButton = demoForm.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
-
-        submitButton.textContent = 'Enviando...';
+        submitButton.textContent = "Enviando...";
         submitButton.disabled = true;
 
         try {
-            const response = await fetch('sendmail.php', {
-                method: 'POST',
-                body: formData
-            });
+        // Envia direto para o FormSubmit via fetch
+        const response = await fetch("https://formsubmit.co/ajax/contact@humanostech.com", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-            const result = await response.json();
-
-            if (result.success) {
-                showNotification('✅ Demo agendada com sucesso! Entraremos em contato em breve.', 'success');
-                demoForm.reset();
-            } else {
-                showNotification('❌ Ocorreu um erro: ' + (result.message || 'Tente novamente mais tarde.'), 'error');
-            }
-
-        } catch (error) {
-            showNotification('❌ Erro inesperado. Verifique sua conexão e tente novamente.', 'error');
+        if (response.ok) {
+            showNotification("Demo agendada com sucesso! Entraremos em contato em breve.", "success");
+            demoForm.reset();
+        } else {
+            showNotification("Erro ao enviar o formulário. Tente novamente.", "error");
+        }
+        } catch (err) {
+        showNotification("Erro de conexão. Verifique sua internet.", "error");
         } finally {
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
         }
     });
-
     
     // Enhanced form interactions
     const formInputs = demoForm.querySelectorAll('input, select, textarea');
@@ -1186,7 +1211,7 @@ function validateForm(data) {
     const errors = [];
     
     // Required fields validation
-    const requiredFields = ['name', 'email', 'company', 'service'];
+    const requiredFields = ['name', 'email', 'company', 'service', 'consent'];
     requiredFields.forEach(field => {
         if (!data[field] || data[field].trim() === '') {
             errors.push(`${field} is required`);

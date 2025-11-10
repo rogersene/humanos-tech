@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="mobile-styles.css">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="styles/mobile-styles.css">
 </head>
 <body>
     <div class="loader-wrapper">
@@ -26,7 +26,7 @@
                 <a href="#inicio" class="nav-link" data-lang="nav-inicio">Inicio</a>
                 <a href="#servicios" class="nav-link" data-lang="nav-servicios">Servicios</a>
                 <a href="#nosotros" class="nav-link" data-lang="nav-nosotros">Nosotros</a>
-                <a href="#fundadores" class="nav-link" data-lang="nav-fundadores">Fundadores</a>
+                <a href="#equipo" class="nav-link" data-lang="nav-equipo">Equipo</a>
                 <a href="blog.html" class="nav-link" data-lang="nav-blog">Blog</a>
                 <a href="software.html" class="nav-link" data-lang="nav-software">Software</a>
                 <a href="#contacto" class="nav-link" data-lang="nav-contacto">Contacto</a>
@@ -305,8 +305,9 @@
     </section>
 
 
-    <!-- Founders Section -->
-        <section class="section team-section process">
+
+    <!-- Equipo Section -->
+        <section id="equipo" class="section team-section process">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title" data-lang="about-us-team-title">Nuestro Equipo</h2>
@@ -365,7 +366,7 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form action="https://formsubmit.co/rogersenefaria@gmail.com" method="POST" id="demo-form">
+                    <form id="demo-form">
                         <div class="form-group">
                             <input type="text" id="name" name="name" required>
                             <label for="name" data-lang="form-name">Nombre completo</label>
@@ -392,6 +393,15 @@
                             <textarea id="message" name="message" rows="4"></textarea>
                             <label for="message" data-lang="form-message">Mensaje (opcional)</label>
                         </div>
+
+                        <div class="form-group consent-group">
+                            <input type="checkbox" id="consent" name="consent" required>
+                            <span>
+                            Eu concordo com o processamento dos meus dados conforme a 
+                            <a href="/privacy-policy.html" target="_blank">política de privacidade</a>.
+                            </span>
+                        </div>
+
                         <button type="submit" class="btn btn-primary" data-lang="form-submit" onclick="location.href=\'#contacto\'">Agendar Demo</button>
                     </form>
                 </div>
@@ -442,24 +452,6 @@
     </footer>
 
     <script src="script.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        const selector = document.querySelector(".language-selector");
-        let hideTimeout;
-
-        selector.addEventListener("mouseenter", () => {
-            clearTimeout(hideTimeout);
-            selector.classList.add("show");
-        });
-
-        selector.addEventListener("mouseleave", () => {
-            hideTimeout = setTimeout(() => {
-            selector.classList.remove("show");
-            }, 200); // atraso de 200ms antes de esconder
-        });
-        });
-    </script>
 </body>
 </html>
 

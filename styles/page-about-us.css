@@ -1,0 +1,109 @@
+.about-section {
+  padding: 6rem 0;
+  background: #0e0e0e;
+  color: #fff;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-text h2 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.about-text h2 span {
+  color: var(--primary-blue);
+}
+
+.about-text p {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 90%;
+}
+
+/* ---- Valores ---- */
+.about-values h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.about-values h2 span {
+  color: var(--primary-blue);
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.value-item {
+  background: #141414;
+  border: 1px solid #1f1f1f;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 15px rgba(0, 110, 255, 0.15);
+}
+
+.icon-box {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 110, 255, 0.1);
+  border-radius: 50%;
+  color: var(--primary-blue);
+}
+
+.value-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.value-item p {
+  font-size: 0.95rem;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-text p {
+    max-width: 100%;
+  }
+}
+
+
+/* ---- CTA BTN ---- */
+
+
+ .contact-cta .btn {
+  margin-top: 16px;
+}
+

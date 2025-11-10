@@ -924,6 +924,80 @@ p {
     padding: 0 0.25rem;
 }
 
+
+/* Checkbox consent harmonizado */
+/* ============================= */
+
+.form-group.consent-group {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  margin-bottom: var(--spacing-lg);
+  flex-direction: row;
+  gap: 8px;
+}
+
+.form-group.consent-group .consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--gray-400);
+  line-height: 1.5;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.form-group.consent-group input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--gray-400);
+  border-radius: 4px;
+  background: var(--gray-700);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  margin-top: 3px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.form-group.consent-group input[type="checkbox"]:hover {
+  border-color: var(--primary-blue);
+}
+
+.form-group.consent-group input[type="checkbox"]:checked {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.form-group.consent-group input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.form-group.consent-group a {
+  color: var(--primary-blue);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.form-group.consent-group a:hover {
+  color: var(--primary-light);
+}
+
+
+
+
 /* Footer */
 .footer {
     background: var(--gray-900);
@@ -1296,198 +1370,82 @@ p {
     line-height: 1.6;
 }
 
-/* Careers Page Styles */
-.job-listings {
-    display: grid;
-    gap: 1.5rem;
-    margin-top: 2rem;
+
+
+/* ========================================== */
+/* Sección - Únete a nuestro equipo global     */
+/* Adaptada al tema escuro de tu página       */
+/* ========================================== */
+
+.join-section {
+  background: var(--background); /* mantém coerência com o tema */
+  text-align: center;
+  padding: 5rem 1rem;
 }
 
-.job-card {
-    padding: 2rem;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+.join-section .section-header {
+  max-width: 700px;
+  margin: 0 auto 3rem;
 }
 
-.job-card:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.08);
+.join-section .section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
 }
 
-.job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+.join-section .section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
-.job-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
+
+/* ============================= */
+/* Cards de benefícios / ícones  */
+/* ============================= */
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  justify-items: center;
 }
 
-.job-department {
-    font-size: 0.9rem;
-    color: var(--primary-color);
-    font-weight: 500;
+.benefit-card {
+  background: rgba(255, 255, 255, 0.05); /* sutil sobre fundo escuro */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 350px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.job-type {
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    background: rgba(var(--primary-rgb), 0.1);
-    color: var(--primary-color);
-    font-size: 0.85rem;
-    font-weight: 500;
+.benefit-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.job-description {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+.benefit-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
-.job-requirements {
-    margin-bottom: 1.5rem;
+.benefit-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
 }
 
-.job-requirements h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.job-requirements ul {
-    list-style: none;
-    padding: 0;
-}
-
-.job-requirements li {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 0.3rem;
-    padding-left: 1rem;
-    position: relative;
-}
-
-.job-requirements li::before {
-    content: '•';
-    color: var(--primary-color);
-    position: absolute;
-    left: 0;
-}
-
-.job-actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-.btn-apply {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-apply:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.3);
-}
-
-/* Blog Page Styles */
-.blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.blog-card {
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.blog-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.blog-image {
-    width: 100%;
-    height: 200px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    position: relative;
-    overflow: hidden;
-}
-
-.blog-image::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-}
-
-.blog-content {
-    padding: 1.5rem;
-}
-
-.blog-meta {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.blog-category {
-    color: var(--primary-color);
-    font-weight: 500;
-}
-
-.blog-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-}
-
-.blog-excerpt {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-.blog-read-more {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: color 0.3s ease;
-}
-
-.blog-read-more:hover {
-    color: var(--secondary-color);
+.benefit-card p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 /* Responsive adjustments */
@@ -2002,93 +1960,17 @@ p {
 }
 
 .footer-logo .logo-image {
-    height: 100px;
+    height: 90px;
     width: auto;
     object-fit: contain;
 }
 
 @media (max-width: 768px) {
     .logo-image {
-        height: 90px;
+        height: 50px;
     }
     
     .footer-logo .logo-image {
         height: 75px;
     }
 }
-
-
-/* Software Page Styles */
-.software-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-3xl);
-}
-
-.software-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
-    box-shadow: var(--shadow-md);
-    transition: all var(--transition-normal);
-    border: 1px solid var(--gray-200);
-}
-
-.software-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--primary-blue);
-}
-
-.software-icon {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-md);
-    text-align: center;
-}
-
-.software-card h3 {
-    color: var(--gray-800);
-    font-size: 1.5rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-md);
-    text-align: center;
-}
-
-.software-card p {
-    color: var(--gray-600);
-    margin-bottom: var(--spacing-lg);
-    text-align: center;
-}
-
-.software-features {
-    list-style: none;
-    padding: 0;
-}
-
-.software-features li {
-    color: var(--gray-700);
-    margin-bottom: var(--spacing-sm);
-    padding-left: var(--spacing-md);
-    position: relative;
-}
-
-.software-features li::before {
-    content: "✓";
-    color: var(--primary-blue);
-    font-weight: var(--font-weight-bold);
-    position: absolute;
-    left: 0;
-}
-
-@media (max-width: 768px) {
-    .software-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .software-card {
-        padding: var(--spacing-lg);
-    }
-}
-

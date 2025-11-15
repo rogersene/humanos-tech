@@ -10,40 +10,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="styles/mobile-styles.css">
+    <link rel="stylesheet" href="styles/page-contact.css">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
-        <div class="nav-container container">
-            <a href="index.html" class="nav-logo">
-                <img src="./assets/img/logo2.png" alt="HumanosTech" class="logo-image">
-            </a>
-            <div class="nav-menu" id="nav-menu">
-                <a href="index.html#inicio" class="nav-link" data-lang="nav-inicio">Inicio</a>
-                <a href="index.html#servicios" class="nav-link" data-lang="nav-servicios">Servicios</a>
-                <a href="index.html#nosotros" class="nav-link" data-lang="nav-nosotros">Nosotros</a>
-                <a href="index.html#talento" class="nav-link" data-lang="nav-talento">Talento</a>
-                <a href="contact.html" class="nav-link" data-lang="nav-contacto">Contacto</a>
+        <div class="nav-container">
+            <!-- LOGO -->
+            <div class="nav-logo">
+            <img src="./assets/img/logo2.png" alt="HumanosTech" class="logo-image">
             </div>
-            <div class="nav-actions">
-                <div class="language-selector">
-                    <button class="lang-btn active" data-lang="es">ES</button>
-                    <div class="lang-dropdown">
-                    <button class="lang-btn" data-lang="es">ES</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="fr">FR</button>
-                    <button class="lang-btn" data-lang="pt">PT</button>
-                    <button class="lang-btn" data-lang="it">IT</button>
-                    <button class="lang-btn" data-lang="de">DE</button>
-                    <button class="lang-btn" data-lang="et">ET</button>
-                    </div>
+
+            <!-- TOPO DIREITA (LÍNGUA + HAMBÚRGUER) -->
+            <div class="nav-right">
+            <div class="language-selector desktop">
+                <button class="lang-btn active" data-lang="es">ES</button>
+                <div class="lang-dropdown">
+                <button class="lang-btn" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="fr">FR</button>
+                <button class="lang-btn" data-lang="pt">PT</button>
+                <button class="lang-btn" data-lang="it">IT</button>
+                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="et">ET</button>
                 </div>
-                <a href="contact.html" class="btn btn-primary cta-btn" data-lang="cta-demo">Agenda una Demo</a>
-                <div class="nav-toggle" id="nav-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            </div>
+
+            <!-- MENU -->
+            <div class="nav-menu" id="nav-menu">
+            <button class="close-menu" id="close-menu">&times;</button>
+
+            <a href="/#inicio" class="nav-link">Inicio</a>
+            <a href="/#servicios" class="nav-link">Servicios</a>
+            <a href="/#nosotros" class="nav-link">Nosotros</a>
+            <a href="/#equipo" class="nav-link">Equipo</a>
+            <a href="blog.html" class="nav-link">Blog</a>
+            <a href="software.html" class="nav-link">Software</a>
+            <a href="/#contacto" class="nav-link">Contacto</a>
+
+
+            <div class="language-selector mobile">
+                <button class="lang-btn active" data-lang="es">ES</button>
+                <div class="lang-dropdown">
+                <button class="lang-btn" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="fr">FR</button>
+                <button class="lang-btn" data-lang="pt">PT</button>
+                <button class="lang-btn" data-lang="it">IT</button>
+                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="et">ET</button>
                 </div>
+            </div>
+
+            <!-- Botão movido para dentro -->
+            <button class="cta-btn" onclick="location.href='#contacto'">
+                Agenda una Demo
+            </button>
             </div>
         </div>
     </nav>
@@ -59,7 +88,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section form-contact">
             <div class="container">
                 <div class="contact-grid">
                     <div class="contact-info">
@@ -97,29 +126,28 @@
                     
                     <div class="contact-form-container">
                         <h2 class="section-title" data-lang="contact-form-title">Envíanos un Mensaje</h2>
-                        <form class="contact-form" id="contactForm">
+                        <form class="contact-form" id="demo-form">
                             <div class="form-group">
-                                <label for="name" data-lang="contact-form-name">Nombre *</label>
                                 <input type="text" id="name" name="name" required>
+                                <label for="name" data-lang="contact-form-name">Nombre *</label>
                             </div>
                             
                             <div class="form-group">
-                                <label for="email" data-lang="contact-form-email">Email *</label>
                                 <input type="email" id="email" name="email" required>
+                                <label for="email" data-lang="contact-form-email">Email *</label>
                             </div>
                             
                             <div class="form-group">
-                                <label for="company" data-lang="contact-form-company">Empresa</label>
                                 <input type="text" id="company" name="company">
+                                <label for="company" data-lang="contact-form-company">Empresa</label>
                             </div>
                             
                             <div class="form-group">
-                                <label for="phone" data-lang="contact-form-phone">Teléfono</label>
                                 <input type="tel" id="phone" name="phone">
+                                <label for="phone" data-lang="contact-form-phone">Teléfono</label>
                             </div>
                             
                             <div class="form-group">
-                                <label for="service" data-lang="contact-form-service">Servicio de Interés</label>
                                 <select id="service" name="service">
                                     <option value="" data-lang="contact-form-service-select">Selecciona un servicio</option>
                                     <option value="data-processing" data-lang="contact-form-service-data">Procesamiento de Datos</option>
@@ -128,27 +156,27 @@
                                     <option value="sales-boost" data-lang="contact-form-service-sales">Impulso de Ventas</option>
                                     <option value="other" data-lang="contact-form-service-other">Otro</option>
                                 </select>
+                                <label for="service" data-lang="contact-form-service">Servicio de Interés</label>
                             </div>
                             
                             <div class="form-group">
-                                <label for="message" data-lang="contact-form-message">Mensaje *</label>
                                 <textarea id="message" name="message" rows="5" required></textarea>
+                                <label for="message" data-lang="contact-form-message">Mensaje *</label>
                             </div>
-                            
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="privacy" name="privacy" required>
-                                    <span class="checkmark"></span>
-                                    <span data-lang="contact-form-privacy">Acepto la <a href="privacy-policy.html">Política de Privacidad</a> *</span>
-                                </label>
+
+                            <div class="form-group consent-group">
+                                    <input type="checkbox" id="consent" name="consent" required>
+                                    <span>
+                                        Eu concordo com o processamento dos meus dados conforme a 
+                                        <a href="/privacy-policy.html" target="_blank">política de privacidade</a>.
+                                    </span>
                             </div>
-                            
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
+
+                            <div class="form-group consent-group">
                                     <input type="checkbox" id="newsletter" name="newsletter">
-                                    <span class="checkmark"></span>
-                                    <span data-lang="contact-form-newsletter">Quiero recibir noticias y actualizaciones por email</span>
-                                </label>
+                                    <span>
+                                        Quiero recibir noticias y actualizaciones por email
+                                    </span>
                             </div>
                             
                             <button type="submit" class="btn btn-primary btn-submit" data-lang="contact-form-submit">Enviar Mensaje</button>
@@ -158,7 +186,7 @@
             </div>
         </section>
 
-        <section class="section contact-cta">
+        <section class="section contact-cta process">
             <div class="container text-center">
                 <h2 class="section-title gradient-text" data-lang="contact-cta-title">¿Prefieres una Demo en Vivo?</h2>
                 <p class="section-subtitle" data-lang="contact-cta-subtitle">Agenda una demostración personalizada de 30 minutos y descubre cómo nuestros servicios pueden transformar tu negocio.</p>

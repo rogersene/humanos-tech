@@ -906,14 +906,20 @@ let currentLanguage = 'es';
 const navbar = document.getElementById('navbar');
 const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('nav-menu');
+const closeMenu = document.getElementById('close-menu');
 const langButtons = document.querySelectorAll('.language-selector .lang-btn');
+
+console.log("langButtons", langButtons)
 const demoForm = document.getElementById('demo-form');
+ const ctaButton = document.querySelector('.cta-btn');
 
 
 // Language Selector Hover Behavior
 
 document.addEventListener("DOMContentLoaded", () => {
-        const selector = document.querySelector(".language-selector");
+    const selectors = document.querySelectorAll(".language-selector");
+
+    selectors.forEach(selector => {
         let hideTimeout;
 
         selector.addEventListener("mouseenter", () => {
@@ -923,9 +929,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         selector.addEventListener("mouseleave", () => {
             hideTimeout = setTimeout(() => {
-            selector.classList.remove("show");
+                selector.classList.remove("show");
             }, 200); // atraso de 200ms antes de esconder
         });
+    });
 });
 
 // Initialize the application
@@ -970,17 +977,24 @@ function initializeLanguage() {
 }
 
 function updateActiveLanguageButton(selectedLang) {
-    const mainButton = document.querySelector('.language-selector > .lang-btn.active');
-    const dropdownButtons = document.querySelectorAll('.lang-dropdown .lang-btn');
+    // Seleciona todos os containers de idioma
+    const selectors = document.querySelectorAll('.language-selector');
 
-    if (mainButton) {
-        mainButton.textContent = selectedLang.toUpperCase();
-        mainButton.setAttribute('data-lang', selectedLang);
-    }
+    selectors.forEach(selector => {
+        // Botão principal dentro do container atual
+        const mainButton = selector.querySelector('.lang-btn.active');
+        // Todos os botões do dropdown dentro do container atual
+        const dropdownButtons = selector.querySelectorAll('.lang-dropdown .lang-btn');
 
-    dropdownButtons.forEach(btn => {
-        const lang = btn.getAttribute('data-lang');
-        btn.style.display = (lang === selectedLang) ? 'none' : 'inline-block';
+        if (mainButton) {
+            mainButton.textContent = selectedLang.toUpperCase();
+            mainButton.setAttribute('data-lang', selectedLang);
+        }
+
+        dropdownButtons.forEach(btn => {
+            const lang = btn.getAttribute('data-lang');
+            btn.style.display = (lang === selectedLang) ? 'none' : 'inline-block';
+        });
     });
 }
 
@@ -1068,24 +1082,67 @@ function updateActiveNavLink() {
 
 // Mobile Menu Management
 function initializeMobileMenu() {
-    navToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        navToggle.classList.toggle('active');
-    });
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-        }
-    });
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  if (!navToggle || !navMenu) return;
+
+  // Toggle (previne bubbling para document)
+  navToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navMenu.classList.toggle('active');
+    navToggle.classList.toggle('active');
+
+    // opcional: bloquear scroll do fundo
+    if (navMenu.classList.contains('active')) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+
+  // evita que cliques dentro do menu fechem ele
+  navMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Close quando clicar fora (document)
+  document.addEventListener('click', () => {
+    if (navMenu.classList.contains('active')) {
+      navMenu.classList.remove('active');
+      navToggle.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+    // Close quando clicar no X do menu
+  closeMenu.addEventListener('click', () => {
+  navMenu.classList.remove('active');
+  navToggle.classList.remove('active');
+});
+
+    if (ctaButton) {
+        ctaButton.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+        document.body.style.overflow = '';
+        });
+    }
+
+  // garante comportamento em ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      navMenu.classList.remove('active');
+      navToggle.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
 }
+
 
 // Scroll Effects
 function initializeScrollEffects() {
     window.addEventListener('scroll', () => {
-        // Navbar background on scroll
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
         } else {
@@ -1149,6 +1206,7 @@ function initializeForm() {
 
         const formData = new FormData(demoForm);
         const data = Object.fromEntries(formData.entries());
+        debugger
 
         if (!validateForm(data)) return;
 
@@ -1159,7 +1217,7 @@ function initializeForm() {
 
         try {
         // Envia direto para o FormSubmit via fetch
-        const response = await fetch("https://formsubmit.co/ajax/contact@humanostech.com", {
+        const response = await fetch("https://formsubmit.co/ajax/rogersenefaria@gmai.com", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
@@ -1188,6 +1246,7 @@ function initializeForm() {
         // Add focus/blur effects
         input.addEventListener('focus', () => {
             input.parentElement.classList.add('focused');
+            input.classList.add('error');
         });
         
         input.addEventListener('blur', () => {
@@ -1232,28 +1291,48 @@ function validateForm(data) {
     return isValid;
 }
 
+const requiredFields = ['name', 'email', 'company', 'service', 'consent'];
+
 function validateField(input) {
-    const value = input.value.trim();
+    const value = input.type === "checkbox" ? input.checked : input.value.trim();
     const fieldName = input.name;
-    
-    // Remove previous error states
+
+    console.log("fieldName", fieldName)
+
+    // Limpa erros anteriores
     input.classList.remove('error');
-    
-    // Validate based on field type
+
+    // 1️⃣ Validação de campos obrigatórios
+    if (requiredFields.includes(fieldName)) {
+        const isEmpty = (input.type === "checkbox") ? !input.checked : value === "";
+        if (isEmpty) {
+            input.classList.add('error');
+            return; // já está inválido, não continua
+        }
+    }
+
+    // 2️⃣ Validações específicas por tipo
     switch (fieldName) {
+
         case 'email':
             if (value && !isValidEmail(value)) {
                 input.classList.add('error');
             }
             break;
+
         case 'name':
         case 'company':
             if (value.length > 0 && value.length < 2) {
                 input.classList.add('error');
             }
             break;
+
+        // Se tiver validação futura para "service", já fica preparado
+        case 'service':
+            break;
     }
 }
+
 
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

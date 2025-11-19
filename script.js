@@ -5,6 +5,9 @@ const translations = {
         'nav-inicio': 'Inicio',
         'nav-servicios': 'Servicios',
         'nav-nosotros': 'Nosotros',
+        'nav-equipo': 'Equipo',
+        'nav-blog': 'Blog',
+        'nav-software': 'Software',
         'nav-talento': 'Talento',
         'nav-contacto': 'Contacto',
         'cta-demo': 'Agenda una Demo',
@@ -160,6 +163,9 @@ const translations = {
         'nav-inicio': 'Home',
         'nav-servicios': 'Services',
         'nav-nosotros': 'About Us',
+        'nav-equipo': 'Team',
+        'nav-blog': 'Blog',
+        'nav-software': 'Software',
         'nav-talento': 'Talent',
         'nav-contacto': 'Contact',
         'cta-demo': 'Schedule a Demo',
@@ -260,6 +266,8 @@ const translations = {
         'form-service-admin': 'Administrative Management',
         'form-service-sales': 'Sales Boost',
         'form-message': 'Message (optional)',
+        'form-data-process-privacy-policy': 'I agree to the processing of my data in accordance with the privacy policy.',
+        'form-privacy': 'Privacy Policy',
         'form-submit': 'Schedule Demo',
         
         // Footer
@@ -308,6 +316,9 @@ const translations = {
         'nav-inicio': 'Accueil',
         'nav-servicios': 'Services',
         'nav-nosotros': 'À propos',
+        'nav-equipo': 'Équipe',
+        'nav-blog': 'Blog',
+        'nav-software': 'Software',
         'nav-talento': 'Talent',
         'nav-contacto': 'Contact',
         'cta-demo': 'Planifier une démo',
@@ -383,6 +394,22 @@ const translations = {
         'step-4-title': 'Nous surveillons et optimisons les résultats',
         'step-4-desc': 'Surveillance continue pour assurer la qualité et optimiser les performances',
         
+
+        // Team Section
+
+        'about-us-team-title': 'Notre Équipe',
+        'about-us-team-subtitle': 'Des professionnels passionnés travaillant à connecter les talents mondiaux avec des opportunités d’affaires.',
+        'about-us-member-1-name': 'Mariela Yuri',
+        'about-us-member-1-role': 'PDG & Fondatrice',
+        'about-us-member-1-desc': 'Experte en stratégie d’entreprise avec plus de 15 ans d’expérience dans la mise en relation d’entreprises et de talents internationaux.',
+        'about-us-member-2-name': 'Carlos Velázquez',
+        'about-us-member-2-role': 'Directeur d’Équipe',
+        'about-us-member-2-desc': 'Spécialiste de la gestion d’équipes réparties à l’échelle mondiale.',
+        'about-us-member-3-name': 'Carlos Lohen',
+        'about-us-member-3-role': 'Directeur des Opérations',
+        'about-us-member-3-desc': 'Spécialiste de l’optimisation des processus sur des plateformes évolutives et des solutions technologiques innovantes.',
+
+
         // Talent Section
         'talent-title': 'Rejoignez notre équipe mondiale',
         'talent-desc': 'Faites partie d\'un réseau de professionnels spécialisés travaillant avec des entreprises leaders dans le monde entier. Développez votre carrière sans limites géographiques.',
@@ -455,7 +482,6 @@ const translations = {
         // Navigation
         'nav-inicio': 'Início',
         'nav-servicios': 'Serviços',
-        'nav-nosotros': 'Sobre Nós',
         'nav-nosotros': 'Sobre Nós',
         'nav-equipo': 'Equipe',
         'nav-talento': 'Talento',
@@ -533,6 +559,21 @@ const translations = {
         'step-4-title': 'Monitoramos e otimizamos os resultados',
         'step-4-desc': 'Acompanhamento contínuo para garantir qualidade e otimizar o desempenho',
         
+
+        // Team Section
+
+        'about-us-team-title': 'Nosso Time',
+        'about-us-team-subtitle': 'Profissionais apaixonados trabalhando para conectar talentos globais a oportunidades de negócios.',
+        'about-us-member-1-name': 'Mariela Yuri',
+        'about-us-member-1-role': 'CEO & Fundadora',
+        'about-us-member-1-desc': 'Especialista em estratégia de negócios com mais de 15 anos conectando empresas a talentos globais.',
+        'about-us-member-2-name': 'Carlos Velázquez',
+        'about-us-member-2-role': 'Diretor de Equipe',
+        'about-us-member-2-desc': 'Especialista em gestão de equipes distribuídas globalmente.',
+        'about-us-member-3-name': 'Carlos Lohen',
+        'about-us-member-3-role': 'Diretor de Operações',
+        'about-us-member-3-desc': 'Especialista em otimização de processos em plataformas escaláveis e soluções tecnológicas inovadoras.',
+
         // Talent Section
         'talent-title': 'Junte-se à nossa equipe global',
         'talent-desc': 'Faça parte de uma rede de profissionais especializados que trabalham com empresas líderes em todo o mundo. Desenvolva sua carreira sem limites geográficos.',
@@ -606,6 +647,9 @@ const translations = {
         'nav-inicio': 'Home',
         'nav-servicios': 'Servizi',
         'nav-nosotros': 'Chi Siamo',
+        'nav-equipo': 'Team',
+        'nav-blog': 'Blog',
+        'nav-software': 'Software',
         'nav-talento': 'Talento',
         'nav-contacto': 'Contatto',
         'cta-demo': 'Prenota una Demo',
@@ -689,7 +733,21 @@ const translations = {
         'benefit-growth': 'Crescita professionale',
         'benefit-remote': 'Lavoro remoto',
         'btn-join-talent': 'Unisciti come talento',
-        
+
+        // Team Section
+        'about-us-team-title': 'Il Nostro Team',
+        'about-us-team-subtitle': 'Professionisti appassionati che lavorano per connettere talenti globali con opportunità di business.',
+        'about-us-member-1-name': 'Mariela Yuri',
+        'about-us-member-1-role': 'CEO & Fondatrice',
+        'about-us-member-1-desc': 'Esperta in strategia aziendale con oltre 15 anni di esperienza nel collegare aziende a talenti globali.',
+        'about-us-member-2-name': 'Carlos Velázquez',
+        'about-us-member-2-role': 'Direttore del Team',
+        'about-us-member-2-desc': 'Specialista nella gestione di team distribuiti a livello globale.',
+        'about-us-member-3-name': 'Carlos Lohen',
+        'about-us-member-3-role': 'Direttore delle Operazioni',
+        'about-us-member-3-desc': 'Specialista nell’ottimizzazione dei processi su piattaforme scalabili e soluzioni tecnologiche innovative.',
+
+
         // Contact Section
         'contact-title': 'Prenota una demo gratuita',
         'contact-desc': 'Scopri come possiamo aiutarti a crescere. Prenota una demo personalizzata e vedi le nostre soluzioni in azione.',
@@ -829,6 +887,21 @@ const translations = {
         'step-4-title': 'Wir überwachen und optimieren die Ergebnisse',
         'step-4-desc': 'Kontinuierliche Überwachung zur Qualitätssicherung und Leistungsoptimierung',
         
+        // Team Section
+
+        'about-us-team-title': 'Unser Team',
+        'about-us-team-subtitle': 'Leidenschaftliche Fachleute, die daran arbeiten, globale Talente mit Geschäftsmöglichkeiten zu verbinden.',
+        'about-us-member-1-name': 'Mariela Yuri',
+        'about-us-member-1-role': 'CEO & Gründerin',
+        'about-us-member-1-desc': 'Expertin für Geschäftsstrategie mit über 15 Jahren Erfahrung in der Verbindung von Unternehmen mit globalen Talenten.',
+        'about-us-member-2-name': 'Carlos Velázquez',
+        'about-us-member-2-role': 'Teamleiter',
+        'about-us-member-2-desc': 'Spezialist für das Management von global verteilten Teams.',
+        'about-us-member-3-name': 'Carlos Lohen',
+        'about-us-member-3-role': 'Leiter der Betriebsabteilung',
+        'about-us-member-3-desc': 'Spezialist für Prozessoptimierung auf skalierbaren Plattformen und innovative technologische Lösungen.',
+
+
         // Talent Section
         'talent-title': 'Treten Sie unserem globalen Team bei',
         'talent-desc': 'Werden Sie Teil eines Netzwerks spezialisierter Fachkräfte, die mit führenden Unternehmen weltweit arbeiten. Entwickeln Sie Ihre Karriere ohne geografische Grenzen.',
@@ -1012,7 +1085,7 @@ function updateLanguage(language) {
             } else if (element.tagName === 'OPTION') {
                 element.textContent = translations[language][key];
             } else {
-                element.textContent = translations[language][key];
+                element.innerHTML = translations[language][key];
             }
         }
     });
@@ -1205,10 +1278,8 @@ function initializeForm() {
         e.preventDefault();
 
         const formData = new FormData(demoForm);
-        const data = Object.fromEntries(formData.entries());
-        debugger
 
-        if (!validateForm(data)) return;
+        if (!validateForm(Object.fromEntries(formData.entries()))) return;
 
         const submitButton = demoForm.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
@@ -1216,29 +1287,26 @@ function initializeForm() {
         submitButton.disabled = true;
 
         try {
-        // Envia direto para o FormSubmit via fetch
-        const response = await fetch("https://formsubmit.co/ajax/rogersenefaria@gmai.com", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+            const response = await fetch("https://formsubmit.co/ajax/contact@humanostech.com", {
+                method: "POST",
+                body: formData
+            });
 
-        if (response.ok) {
-            showNotification("Demo agendada com sucesso! Entraremos em contato em breve.", "success");
-            demoForm.reset();
-        } else {
-            showNotification("Erro ao enviar o formulário. Tente novamente.", "error");
-        }
-        } catch (err) {
-        showNotification("Erro de conexão. Verifique sua internet.", "error");
+            if (response.ok) {
+                showNotification("Demo agendada com sucesso!", "success");
+                demoForm.reset();
+            } else {
+                showNotification("Erro ao enviar o formulário.", "error");
+            }
+
+        } catch (error) {
+            showNotification("Erro de conexão.", "error");
         } finally {
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
         }
     });
+
     
     // Enhanced form interactions
     const formInputs = demoForm.querySelectorAll('input, select, textarea');
@@ -1246,7 +1314,6 @@ function initializeForm() {
         // Add focus/blur effects
         input.addEventListener('focus', () => {
             input.parentElement.classList.add('focused');
-            input.classList.add('error');
         });
         
         input.addEventListener('blur', () => {
@@ -1296,8 +1363,6 @@ const requiredFields = ['name', 'email', 'company', 'service', 'consent'];
 function validateField(input) {
     const value = input.type === "checkbox" ? input.checked : input.value.trim();
     const fieldName = input.name;
-
-    console.log("fieldName", fieldName)
 
     // Limpa erros anteriores
     input.classList.remove('error');
@@ -1825,7 +1890,8 @@ Object.assign(translations.it, {
     'feature-planning': 'Pianificazione',
     'feature-tracking': 'Monitoraggio',
     'contact-cta-title': 'Pronto a ottimizzare la tua gestione amministrativa?',
-    'contact-cta-subtitle': 'Prenota una demo gratuita e scopri come possiamo semplificare le tue attività quotidiane.'
+    'contact-cta-subtitle': 'Prenota una demo gratuita e scopri come possiamo semplificare le tue attività quotidiane.',
+    'contact-form-privacy': 'Accetto il trattamento dei miei dati in conformità con la <a href="/privacy-policy.html" target="_blank">politica sulla privacy</a>',
 });
 
 Object.assign(translations.de, {
@@ -1852,7 +1918,8 @@ Object.assign(translations.de, {
     'feature-planning': 'Planung',
     'feature-tracking': 'Verfolgung',
     'contact-cta-title': 'Bereit, Ihr Verwaltungsmanagement zu optimieren?',
-    'contact-cta-subtitle': 'Buchen Sie eine kostenlose Demo und entdecken Sie, wie wir Ihre täglichen Aufgaben vereinfachen können.'
+    'contact-cta-subtitle': 'Buchen Sie eine kostenlose Demo und entdecken Sie, wie wir Ihre täglichen Aufgaben vereinfachen können.',
+    'contact-form-privacy': 'Ich akzeptiere die Verarbeitung meiner Daten gemäß der <a href="/privacy-policy.html" target="_blank">Datenschutzrichtlinie</a>',
 });
 
 
@@ -1931,7 +1998,8 @@ Object.assign(translations.de, {
         'sales-boost-service-4-title': 'Optimisation des Processus de Vente',
         'sales-boost-service-4-desc': 'Nous analysons et améliorons vos entonnoirs de vente pour identifier les opportunités et augmenter l\'efficacité.',
         'contact-cta-title': 'Prêt à faire décoller vos ventes?',
-        'contact-cta-subtitle': 'Planifiez une démo gratuite et découvrez comment nous pouvons transformer vos résultats commerciaux.'
+        'contact-cta-subtitle': 'Planifiez une démo gratuite et découvrez comment nous pouvons transformer vos résultats commerciaux.',
+        'contact-form-privacy': "J'accepte le traitement de mes données conformément à la <a href=\"/privacy-policy.html\" target=\"_blank\">politique de confidentialité</a>",
     });
 
     Object.assign(translations.pt, {
@@ -1956,7 +2024,8 @@ Object.assign(translations.de, {
         'sales-boost-service-4-title': 'Otimização de Processos de Vendas',
         'sales-boost-service-4-desc': 'Analisamos e melhoramos seus funis de venda para identificar oportunidades e aumentar a eficiência.',
         'contact-cta-title': 'Pronto para disparar suas vendas?',
-        'contact-cta-subtitle': 'Agende uma demo gratuita e descubra como podemos transformar seus resultados comerciais.'
+        'contact-cta-subtitle': 'Agende uma demo gratuita e descubra como podemos transformar seus resultados comerciais.',
+        'contact-form-privacy': 'Aceito o processamento dos meus dados de acordo com a <a href="/privacy-policy.html" target="_blank">política de privacidade</a>',
     });
 
     Object.assign(translations.it, {
@@ -2030,6 +2099,9 @@ Object.assign(translations.de, {
         'about-us-value-3-desc': 'Buscamos constantemente nuevas formas de mejorar y evolucionar nuestros servicios.',
         'about-us-value-4-title': 'Transparencia',
         'about-us-value-4-desc': 'Mantenemos comunicación clara y honesta en todas nuestras relaciones comerciales.',
+        
+    // Team Section
+    
         'about-us-team-title': 'Nuestro Equipo',
         'about-us-team-subtitle': 'Profesionales apasionados que trabajan para conectar el talento global con las oportunidades empresariales.',
         'about-us-member-1-name': 'Mariela Yuri',
@@ -2168,7 +2240,7 @@ Object.assign(translations.de, {
         'contact-form-service-sales': 'Impulso de Ventas',
         'contact-form-service-other': 'Otro',
         'contact-form-message': 'Mensaje *',
-        'contact-form-privacy': 'Acepto la <a href="privacy-policy.html">Política de Privacidad</a> *',
+        'contact-form-privacy': 'Acepto el procesamiento de mis datos de acuerdo con la <a href="/privacy-policy.html" target="_blank">política de privacidad</a>',
         'contact-form-newsletter': 'Quiero recibir noticias y actualizaciones por email',
         'contact-form-submit': 'Enviar Mensaje',
         'contact-cta-title': '¿Prefieres una Demo en Vivo?',
@@ -2196,6 +2268,8 @@ Object.assign(translations.en, {
         'about-us-value-3-desc': 'We constantly seek new ways to improve and evolve our services.',
         'about-us-value-4-title': 'Transparency',
         'about-us-value-4-desc': 'We maintain clear and honest communication in all our business relationships.',
+        
+    // Team Section
         'about-us-team-title': 'Our Team',
         'about-us-team-subtitle': 'Passionate professionals working to connect global talent with business opportunities.',
         'about-us-member-1-name': 'Mariela Yuri',
@@ -2307,7 +2381,7 @@ Object.assign(translations.en, {
         'contact-form-service-sales': 'Sales Boost',
         'contact-form-service-other': 'Other',
         'contact-form-message': 'Message *',
-        'contact-form-privacy': 'I accept the <a href="privacy-policy.html">Privacy Policy</a> *',
+        'contact-form-privacy': 'I accept the processing of my data in accordance with the <a href="/privacy-policy.html" target="_blank">privacy policy</a>',
         'contact-form-newsletter': 'I want to receive news and updates by email',
         'contact-form-submit': 'Send Message',
         'contact-cta-title': 'Prefer a Live Demo?',

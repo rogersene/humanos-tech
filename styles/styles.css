@@ -1142,6 +1142,11 @@ input[type="checkbox"] {
     color: var(--primary-light);
 }
 
+.link-privacy-policy {
+    font-weight: var(--font-weight-bold);
+    text-decoration: underline;
+}
+
 
 
 

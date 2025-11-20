@@ -1301,6 +1301,7 @@ function initializeForm() {
         if (!validateForm(Object.fromEntries(formData.entries()))) return;
 
         const submitButton = demoForm.querySelector('button[type="submit"]');
+        const language = localStorage.getItem('preferred-language');
         const originalText = submitButton.textContent;
         submitButton.textContent = translations[language]["form-submit-sending"];
         submitButton.disabled = true;

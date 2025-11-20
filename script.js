@@ -116,6 +116,10 @@ const translations = {
         'form-service-sales': 'Impulso de Ventas',
         'form-message': 'Mensaje (opcional)',
         'form-submit': 'Agendar Demo',
+        'form-submit-sending': 'Enviando...',
+        'form-submit-success': '¡Demo agendada con éxito!',
+        'form-submit-error': 'Error al enviar el formulario.',
+        
         
           // Footer
         'footer-desc': 'Conectando el potencial humano con la eficiencia digital',
@@ -269,6 +273,9 @@ const translations = {
         'form-data-process-privacy-policy': 'I agree to the processing of my data in accordance with the privacy policy.',
         'form-privacy': 'Privacy Policy',
         'form-submit': 'Schedule Demo',
+        'form-submit-sending': 'Sending...',
+        'form-submit-success': 'Demo successfully scheduled!',
+        'form-submit-error': 'Error submitting the form.',
         
         // Footer
         'footer-desc': 'Connecting human potential with digital efficiency',
@@ -436,6 +443,9 @@ const translations = {
         'form-service-sales': 'Boost des Ventes',
         'form-message': 'Message (optionnel)',
         'form-submit': 'Planifier une Démo',
+        'form-submit-sending': 'Envoi...',
+        'form-submit-success': 'Démo planifiée avec succès !',
+        'form-submit-error': 'Erreur lors de l\'envoi du formulaire.',
         
         // Footer
         'footer-desc': 'Connecter le potentiel humain avec l\'efficacité numérique',
@@ -600,6 +610,9 @@ const translations = {
         'form-service-sales': 'Impulso de Vendas',
         'form-message': 'Mensagem (opcional)',
         'form-submit': 'Agendar Demo',
+        'form-submit-sending': 'Enviando...',
+        'form-submit-success': 'Demo agendada com sucesso!',
+        'form-submit-error': 'Erro ao enviar o formulário.',
         
         // Footer
         'footer-desc': 'Conectando o potencial humano com a eficiência digital',
@@ -765,6 +778,9 @@ const translations = {
         'form-service-sales': 'Spinta alle Vendite',
         'form-message': 'Messaggio (opzionale)',
         'form-submit': 'Prenota Demo',
+        'form-submit-sending': 'Invio...',
+        'form-submit-success': 'Demo prenotata con successo!',
+        'form-submit-error': 'Errore durante l\'invio del modulo.',
         
         // Footer
         'footer-desc': 'Collegare il potenziale umano con l\'efficienza digitale',
@@ -928,6 +944,9 @@ const translations = {
         'form-service-sales': 'Verkaufsförderung',
         'form-message': 'Nachricht (optional)',
         'form-submit': 'Demo buchen',
+        'form-submit-sending': 'Wird gesendet...',
+        'form-submit-success': 'Demo erfolgreich gebucht!',
+        'form-submit-error': 'Fehler beim Senden des Formulars.',
         
         // Footer
         'footer-desc': 'Menschliches Potenzial mit digitaler Effizienz verbinden',
@@ -1283,7 +1302,7 @@ function initializeForm() {
 
         const submitButton = demoForm.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
-        submitButton.textContent = "Enviando...";
+        submitButton.textContent = translations[language]["form-submit-sending"];
         submitButton.disabled = true;
 
         try {
@@ -1293,14 +1312,14 @@ function initializeForm() {
             });
 
             if (response.ok) {
-                showNotification("Demo agendada com sucesso!", "success");
+                showNotification(translations[language]["form-submit-success"], "success");
                 demoForm.reset();
             } else {
-                showNotification("Erro ao enviar o formulário.", "error");
+                showNotification(translations[language]["form-submit-error"], "error");
             }
 
         } catch (error) {
-            showNotification("Erro de conexão.", "error");
+            showNotification(translations[language]["form-submit-error"], "error");
         } finally {
             submitButton.textContent = originalText;
             submitButton.disabled = false;
@@ -1539,7 +1558,7 @@ document.addEventListener('mousedown', () => {
 function initializeAccessibility() {
     // Add skip to content link
     const skipLink = document.createElement('a');
-    skipLink.href = '#inicio';
+    skipLink.href = '/#inicio';
     skipLink.textContent = 'Saltar al contenido principal';
     skipLink.className = 'skip-link';
     skipLink.style.cssText = `
@@ -2101,7 +2120,7 @@ Object.assign(translations.de, {
         'about-us-value-4-desc': 'Mantenemos comunicación clara y honesta en todas nuestras relaciones comerciales.',
         
     // Team Section
-    
+
         'about-us-team-title': 'Nuestro Equipo',
         'about-us-team-subtitle': 'Profesionales apasionados que trabajan para conectar el talento global con las oportunidades empresariales.',
         'about-us-member-1-name': 'Mariela Yuri',

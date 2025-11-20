@@ -1301,9 +1301,8 @@ function initializeForm() {
         if (!validateForm(Object.fromEntries(formData.entries()))) return;
 
         const submitButton = demoForm.querySelector('button[type="submit"]');
-        const language = localStorage.getItem('preferred-language');
         const originalText = submitButton.textContent;
-        submitButton.textContent = translations[language]["form-submit-sending"];
+        submitButton.textContent = translations[currentLanguage]["form-submit-sending"];
         submitButton.disabled = true;
 
         try {
@@ -1313,14 +1312,14 @@ function initializeForm() {
             });
 
             if (response.ok) {
-                showNotification(translations[language]["form-submit-success"], "success");
+                showNotification(translations[currentLanguage]["form-submit-success"], "success");
                 demoForm.reset();
             } else {
-                showNotification(translations[language]["form-submit-error"], "error");
+                showNotification(translations[currentLanguage]["form-submit-error"], "error");
             }
 
         } catch (error) {
-            showNotification(translations[language]["form-submit-error"], "error");
+            showNotification(translations[currentLanguage]["form-submit-error"], "error");
         } finally {
             submitButton.textContent = originalText;
             submitButton.disabled = false;
